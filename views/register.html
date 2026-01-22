@@ -1,24 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>DevStyle | Crear Cuenta</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
-    <div class="logo">
-        <img src="/img/logo-devstyle.png" alt="DevStyle Logo">
-    </div>
-    <form class="search-bar">
-        <input type="text" placeholder="Buscar periféricos, ropa...">
-        <button type="submit"><i class="fas fa-search"></i></button>
-    </form>
-    <nav class="user-nav">
-        <a href="/register.html">Crear cuenta</a>
-        <a href="/login.html">Ingresar</a>
-        <a href="/productCart.html"><i class="fas fa-shopping-cart"></i></a>
-    </nav>
-</header>
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none;">
+                <h2 style="color:var(--accent);"><i class="fas fa-code"></i> DevStyle</h2>
+            </a>
+        </div>
+        <nav class="user-nav">
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="index.html"><i class="fas fa-home"></i> Volver</a>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <section class="auth-box" style="max-width: 500px;"> <h2>Únete al equipo 🚀</h2>
+            
+            <form action="/" method="POST">
+                
+                <div style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="nombre">Nombre</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="nombre" name="nombre" placeholder="Juan" required>
+                        </div>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="apellido">Apellido</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user-tag"></i> <input type="text" id="apellido" name="apellido" placeholder="Pérez" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="juan@ejemplo.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="re-password">Confirmar Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-check-circle"></i>
+                        <input type="password" id="re-password" name="re-password" placeholder="Repite la contraseña" required>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" required> Acepto los <a href="#" style="margin-left:4px; color:var(--accent);">Términos y Condiciones</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary">CREAR CUENTA</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>¿Ya tienes cuenta? <a href="login.html">Inicia Sesión</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Copyright © 2023 DevStyle Team. Hecho con <i class="fas fa-heart" style="color:var(--accent);"></i> para programadores.</p>
+    </footer>
+
 </body>
 </html>

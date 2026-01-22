@@ -1,24 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>DevStyle | Teclado Mecánico RGB</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <header>
-    <div class="logo">
-        <img src="/img/logo-devstyle.png" alt="DevStyle Logo">
-    </div>
-    <form class="search-bar">
-        <input type="text" placeholder="Buscar periféricos, ropa...">
-        <button type="submit"><i class="fas fa-search"></i></button>
-    </form>
-    <nav class="user-nav">
-        <a href="/register.html">Crear cuenta</a>
-        <a href="/login.html">Ingresar</a>
-        <a href="/productCart.html"><i class="fas fa-shopping-cart"></i></a>
-    </nav>
-</header>
+        <div class="logo">
+            <a href="index.html" style="text-decoration:none;">
+                <h2 style="color:var(--accent);"><i class="fas fa-code"></i> DevStyle</h2>
+            </a>
+        </div>
+        <form class="search-bar" action="#" method="GET">
+            <input type="text" placeholder="Buscar productos...">
+            <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+        <nav class="user-nav">
+            <a href="register.html"><i class="fas fa-user-plus"></i> Registro</a>
+            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="productCart.html"><i class="fas fa-shopping-cart"></i></a>
+        </nav>
+    </header>
+
+    <main class="detail-container">
+        
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a> <i class="fas fa-chevron-right"></i>
+            <span>Periféricos</span> <i class="fas fa-chevron-right"></i>
+            <span class="current">Teclado Mecánico RGB</span>
+        </div>
+
+        <section class="product-detail">
+            
+            <div class="detail-image">
+                <img src="../public/img/teclado.jpg" alt="Teclado Mecánico RGB">
+            </div>
+
+            <div class="detail-info">
+                <h1>Teclado Mecánico RGB - Switches Cherry MX Blue</h1>
+                
+                <div class="price-box">
+                    <span class="final-price">$120.00</span>
+                    <span class="discount">10% OFF</span>
+                </div>
+                
+                <p class="payment-method"><i class="far fa-credit-card"></i> 12 cuotas sin interés de $10.00</p>
+                
+                <p class="description">
+                    El teclado definitivo para tu setup. Cuenta con retroiluminación RGB personalizable tecla por tecla, 
+                    construcción de aluminio de grado aeronáutico y switches mecánicos táctiles para esa respuesta 
+                    auditiva que tanto nos gusta al programar.
+                </p>
+
+                <form action="/productCart.html" class="buy-form">
+                    <div class="selectors">
+                        <div class="selector-group">
+                            <label>Color:</label>
+                            <select>
+                                <option>Negro Mate</option>
+                                <option>Blanco Nieve</option>
+                            </select>
+                        </div>
+                        <div class="selector-group">
+                            <label>Cantidad:</label>
+                            <input type="number" value="1" min="1" max="5">
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button type="button" class="btn-primary" style="width: 100%;">AGREGAR AL CARRITO</button>
+                    </div>
+                </form>
+                
+                <div class="security-info">
+                    <p><i class="fas fa-shield-alt"></i> Garantía oficial de 12 meses</p>
+                    <p><i class="fas fa-truck"></i> Envío gratis a todo el país</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Copyright © 2023 DevStyle Team. Hecho con <i class="fas fa-heart" style="color:var(--accent);"></i> para programadores.</p>
+    </footer>
+
 </body>
 </html>
