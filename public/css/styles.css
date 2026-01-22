@@ -1,0 +1,22 @@
+:root {
+    /* Paleta de colores "DevStyle" */
+    --bg-color: #121212;          /* Fondo oscuro (casi negro) */
+    --card-bg: #1e1e1e;           /* Fondo de tarjetas/secciones */
+    --text-primary: #e0e0e0;      /* Texto claro */
+    --text-secondary: #a0a0a0;    /* Texto gris para detalles */
+    --accent-color: #00bcd4;      /* Cian eléctrico (botones, enlaces) */
+    --accent-hover: #008ba3;      /* Cian más oscuro para hover */
+    --font-main: 'Roboto', sans-serif; /* Fuente moderna y legible */
+}
+
+* {
+    box-sizing: border-box; /* Vital para que el padding no rompa el diseño */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+}
