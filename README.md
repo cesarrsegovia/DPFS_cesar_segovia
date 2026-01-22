@@ -23,3 +23,4 @@ MercadoLibre: Referencia obligada en Latinoamérica para el flujo de compra, car
 GetDigital: Inspiración para la categoría de "Gadgets" y ropa con temática geek, observando cómo categorizan productos "fun".
 
 Amazon: El estándar de oro en UX, específicamente en sus sistemas de reseñas y recomendaciones cruzadas.
+
