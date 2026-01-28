@@ -1,26 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevStyle | Crear Cuenta</title>
-    <link rel="stylesheet" href="../public/css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <%- include('../partials/head') %>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <a href="index.html" style="text-decoration:none;">
-                <h2 style="color:var(--accent);"><i class="fas fa-code"></i> DevStyle</h2>
-            </a>
-        </div>
-        <nav class="user-nav">
-            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="index.html"><i class="fas fa-home"></i> Volver</a>
-        </nav>
-    </header>
+    
+    <%- include('../partials/header') %>
 
     <main class="auth-container">
         <section class="auth-box" style="max-width: 500px;"> <h2>Únete al equipo 🚀</h2>
@@ -82,9 +68,7 @@
         </section>
     </main>
 
-    <footer>
-        <p>Copyright © 2023 DevStyle Team. Hecho con <i class="fas fa-heart" style="color:var(--accent);"></i> para programadores.</p>
-    </footer>
+    <%- include('../partials/footer') %>
 
 </body>
 </html>

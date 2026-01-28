@@ -1,0 +1,25 @@
+{
+  "name": "tf-dh",
+  "version": "1.0.0",
+  "description": "DevStyle - E-commerce para Desarrolladores\r Descripción del Proyecto\r DevStyle es un mercado en línea diseñado específicamente para profesionales y estudiantes del mundo de la tecnología. Ofrecemos una selección curada de productos que mejoran el espacio de trabajo (setup), aumentan la productividad y permiten a los desarrolladores expresar su pasión por el código a través de su vestimenta y accesorios.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cesarrsegovia/DPFS_cesar_segovia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cesarrsegovia/DPFS_cesar_segovia/issues"
+  },
+  "homepage": "https://github.com/cesarrsegovia/DPFS_cesar_segovia#readme",
+  "dependencies": {
+    "ejs": "^4.0.1",
+    "express": "^5.2.1"
+  }
+}

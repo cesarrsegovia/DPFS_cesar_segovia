@@ -1,27 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevStyle | Tu Carrito</title>
-    <link rel="stylesheet" href="../public/css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <%- include('../partials/head') %>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <a href="index.html" style="text-decoration:none;">
-                <h2 style="color:var(--accent);"><i class="fas fa-code"></i> DevStyle</h2>
-            </a>
-        </div>
-        <nav class="user-nav">
-            <a href="register.html"><i class="fas fa-user-plus"></i> Registro</a>
-            <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="productCart.html" style="color:var(--accent);"><i class="fas fa-shopping-cart"></i></a>
-        </nav>
-    </header>
+    <%- include('../partials/header') %>
 
     <main class="cart-container">
         <h1>Tu Carrito de Compras</h1>
@@ -32,7 +16,7 @@
                 
                 <article class="cart-item">
                     <div class="item-img">
-                        <img src="../public/img/teclado.jpg" alt="Teclado Mecánico">
+                        <img src="/img/teclado.jpg" alt="Teclado Mecánico">
                     </div>
                     <div class="item-info">
                         <h3>Teclado Mecánico RGB</h3>
@@ -50,7 +34,7 @@
 
                 <article class="cart-item">
                     <div class="item-img">
-                        <img src="../public/img/mouse.jpg" alt="Mouse Gamer">
+                        <img src="/img/mouse.jpg" alt="Mouse Gamer">
                     </div>
                     <div class="item-info">
                         <h3>Mouse Ergonómico</h3>
@@ -97,9 +81,7 @@
         </div>
     </main>
 
-    <footer>
-        <p>Copyright © 2023 DevStyle Team. Hecho con <i class="fas fa-heart" style="color:var(--accent);"></i> para programadores.</p>
-    </footer>
+    <%- include('../partials/footer') %>
 
 </body>
 </html>
