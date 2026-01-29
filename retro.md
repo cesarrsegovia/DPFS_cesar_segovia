@@ -30,3 +30,6 @@
 
 ## Acciones para el próximo Sprint
 - Investigar un poco sobre EJS antes de empezar el Sprint 3.
+
+# Retrospectiva Sprint 3 
+- Aprendí a estructurar MVC y usar EJS para no repetir código

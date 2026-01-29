@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('../partials/head') %>
+</head>
+<body>
+
+    <%- include('../partials/header') %>
+
+    <main class="auth-container">
+        <section class="auth-box" style="max-width: 800px;">
+            <h2>Crear Nuevo Producto 📦</h2>
+            
+            <form action="/products" method="POST" enctype="multipart/form-data">
+                
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 2; min-width: 300px;">
+                        <label for="name">Nombre del Producto</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-tag"></i>
+                            <input type="text" id="name" name="name" placeholder="Ej: Teclado Mecánico" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="flex: 1; min-width: 150px;">
+                        <label for="price">Precio</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-dollar-sign"></i>
+                            <input type="number" id="price" name="price" placeholder="0.00" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea name="description" id="description" rows="4" 
+                        style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"
+                        placeholder="Escribe los detalles del producto..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="category">Categoría</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-list"></i>
+                            <select name="category" id="category" 
+                                style="width: 100%; background: transparent; border: none; color: white; outline: none; padding-left: 10px;">
+                                <option value="" disabled selected>Selecciona una...</option>
+                                <option value="perifericos">Periféricos</option>
+                                <option value="ropa">Ropa</option>
+                                <option value="libros">Libros</option>
+                                <option value="deco">Decoración</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="flex: 1;">
+                        <label for="image">Imagen del Producto</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-image"></i>
+                            <input type="file" id="image" name="image" accept="image/*" required 
+                                style="padding-top: 10px;"> </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn-primary">GUARDAR PRODUCTO</button>
+                    <a href="/" style="display: block; text-align: center; margin-top: 15px; color: var(--text-gray); font-size: 0.9rem;">Cancelar</a>
+                </div>
+
+            </form>
+        </section>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+</body>
+</html>

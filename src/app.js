@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
+
+// SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
+const productsRoutes = require('./routes/products');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 
@@ -37,6 +41,11 @@ app.get('/productDetail', (req, res) => {
 app.get('/productCart', (req, res) => {
     res.render('products/productCart');
 });
+
+// 2. USAR LAS RUTAS CON PREFIJOS
+app.use('/', mainRoutes);             // Rutas raíz (Home)
+app.use('/users', usersRoutes);       // Todas las rutas de usuarios empiezan con /users
+app.use('/products', productsRoutes); // Todas las rutas de productos empiezan con /products
 
 // Levantar el servidor
 const PORT = 3000;
