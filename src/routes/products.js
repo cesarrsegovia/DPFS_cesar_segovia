@@ -4,8 +4,8 @@ const router = express.Router();
 
 const productsController = require('../controllers/productsController');
 
-// URL final: /products/detail
-router.get('/detail', productsController.detail); 
+// El ":id" es un comodín. Express guardará ahí el número que venga en la URL.
+router.get('/detail/:id', productsController.detail);
 
 // URL final: /products/cart
 router.get('/cart', productsController.cart);
