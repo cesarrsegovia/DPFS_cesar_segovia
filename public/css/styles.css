@@ -666,3 +666,43 @@ footer {
         margin-left: auto; /* Empuja el basurero a la derecha */
     }
 }
+
+/* Botón de Editar */
+.btn-edit {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #444; /* Gris oscuro */
+    color: white;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #666; /* Gris más claro al pasar el mouse */
+    color: var(--accent); /* Texto color acento */
+}
+
+/* Botón de Eliminar */
+.btn-delete {
+    display: block;
+    width: 100%;
+    background-color: #ff5252; /* Rojo suave */
+    color: white;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem; /* Mismo tamaño que los otros */
+}
+
+.btn-delete:hover {
+    background-color: #ff0000; /* Rojo intenso */
+}

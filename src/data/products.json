@@ -34,14 +34,5 @@
     "discount": 5,
     "image": "lentes.jpg",
     "category": "accesorios"
-  },
-  {
-    "id": 5,
-    "name": "Auricularez ZEUS PRO",
-    "price": 150000,
-    "discount": 0,
-    "category": "perifericos",
-    "description": "Auriculares inalambricos Redragon Zeus PRO",
-    "image": "product-1770908502988.avif"
   }
 ]

@@ -41,4 +41,7 @@ router.get('/edit/:id', productsController.edit);
 // Usamos upload.single por si quiere cambiar la foto
 router.put('/:id', upload.single('image'), productsController.update);
 
+// NUEVA RUTA DELETE
+router.delete('/:id', productsController.destroy);
+
 module.exports = router;
