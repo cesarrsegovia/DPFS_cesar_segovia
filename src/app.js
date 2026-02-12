@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const methodOverride = require('method-override');
 
 // SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
@@ -11,6 +12,8 @@ const app = express();
 // Configuración de la carpeta pública (Imágenes y CSS)
 // Le decimos a Express: "Todo lo que esté en 'public', sírvelo directo"
 app.use(express.static(path.join(__dirname, '../public')));
+
+app.use(methodOverride('_method'));
 
 // Configuración del Motor de Plantillas (EJS)
 app.set('view engine', 'ejs');

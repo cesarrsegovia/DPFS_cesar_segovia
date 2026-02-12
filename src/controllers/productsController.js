@@ -4,7 +4,14 @@ const path = require('path');
 
 // 1. Leemos el JSON de productos (igual que hiciste en mainController)
 const productsFilePath = path.join(__dirname, '../data/products.json');
-const products = JSON.parse(fs.readFileSync(productsFilePath, 'utf-8'));
+// Helper para leer el JSON (reutilizable)
+const getProducts = () => {
+    // Si el archivo está vacío o da error, devolvemos un array vacío para que no rompa
+    if (!fs.existsSync(productsFilePath)) return [];
+    const fileContent = fs.readFileSync(productsFilePath, 'utf-8');
+    // Si el archivo está vacío, devolvemos array vacío
+    return fileContent ? JSON.parse(fileContent) : [];
+};
 
 const controller = {
     // Listado de productos (el Home muestra destacados, pero quizás quieras una lista completa luego)
@@ -13,20 +20,19 @@ const controller = {
         res.render('products/productCart'); // Ejemplo temporal
     },
     detail: (req, res) => {
-        // 2. Obtenemos el ID de la URL
-        const id = req.params.id;
-        
-        // 3. Buscamos el producto exacto
-        // (Usamos '==' en vez de '===' porque el ID de la URL es texto y en el JSON es número)
-        const product = products.find(product => product.id == id);
+    // 1. LLAMAMOS A LA FUNCIÓN PARA TRAER LOS DATOS
+    const products = getProducts();
 
-        // Si el producto existe, lo mandamos a la vista
-        if (product) {
-            res.render('products/productDetail', { product: product });
-        } else {
-            res.send("¡Ups! No encontramos ese producto"); // Manejo simple de error
-        }
-    },
+    // 2. Ahora sí buscamos
+    const id = req.params.id;
+    const product = products.find(product => product.id == id);
+
+    if (product) {
+        res.render('products/productDetail', { product: product });
+    } else {
+        res.send("Producto no encontrado");
+    }
+},
     cart: (req, res) => {
         res.render('products/productCart');
     },
@@ -35,10 +41,75 @@ const controller = {
         // Debes crear este archivo: src/views/products/productCreate.ejs
         res.render('products/productCreate'); 
     },
+
+    // --- LÓGICA DE GUARDADO (STORE) ---
+    store: (req, res) => {
+        // 1. Leemos todos los productos actuales
+        const products = getProducts();
+
+        // 2. Generamos un ID nuevo (Tomamos el último ID y le sumamos 1)
+        // Si no hay productos, el ID es 1
+        const newId = products.length > 0 ? products[products.length - 1].id + 1 : 1;
+
+        // 3. Creamos el objeto nuevo producto
+        const newProduct = {
+            id: newId,
+            name: req.body.name,          // Viene del input name="name"
+            price: Number(req.body.price),// Convertimos a número
+            discount: 0,                  // Por defecto 0
+            category: req.body.category,
+            description: req.body.description,
+            // Si subió imagen, usamos el nombre del archivo. Si no, una por defecto.
+            image: req.file ? req.file.filename : 'default-image.png'
+        };
+
+        // 4. Agregamos el nuevo producto al array
+        products.push(newProduct);
+
+        // 5. Sobrescribimos el archivo JSON con los datos nuevos
+        fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), 'utf-8');
+
+        // 6. Redirigimos al usuario (al Home o al detalle del producto nuevo)
+        res.redirect('/');
+    },
     edit: (req, res) => {
-        // Debes crear este archivo: src/views/products/productEdit.ejs
-        res.render('products/productEdit');
-    }
+        const products = getProducts(); // <--- Agrega esto
+        const id = req.params.id;
+        const product = products.find(product => product.id == id);
+
+        res.render('products/productEdit', { product: product });
+    },
+    // NUEVO MÉTODO UPDATE
+    update: (req, res) => {
+        // 1. Leer todos los productos
+        const products = getProducts();
+        const id = req.params.id;
+
+        // 2. Buscar el índice del producto que queremos editar
+        const productIndex = products.findIndex(p => p.id == id);
+
+        if (productIndex >= 0) {
+             // 3. Modificar solo lo que llegó del formulario
+             // Mantenemos la imagen vieja si no subió una nueva
+             const oldProduct = products[productIndex];
+             
+             products[productIndex] = {
+                ...oldProduct, // Copia todo lo viejo primero
+                name: req.body.name,
+                price: Number(req.body.price),
+                category: req.body.category,
+                description: req.body.description,
+                // Si hay file nuevo usa ese, sino usa la imagen vieja
+                image: req.file ? req.file.filename : oldProduct.image
+             };
+
+             // 4. Guardar en JSON
+             fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), 'utf-8');
+        }
+
+        // 5. Redirigir al detalle
+        res.redirect('/products/detail/' + id);
+    },
 };
 
 module.exports = controller;

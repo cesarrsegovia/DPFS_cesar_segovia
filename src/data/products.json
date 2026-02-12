@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Teclado Mecánico RGB",
     "description": "El teclado definitivo para tu setup. Switches Cherry MX Blue.",
-    "price": 120.00,
+    "price": 120,
     "discount": 10,
     "image": "teclado.jpg",
     "category": "perifericos"
@@ -12,7 +12,7 @@
     "id": 2,
     "name": "Mouse Ergonómico",
     "description": "Mouse inalámbrico de alta precisión con 4000 DPI.",
-    "price": 55.00,
+    "price": 55,
     "discount": 0,
     "image": "mouse.jpg",
     "category": "perifericos"
@@ -21,7 +21,7 @@
     "id": 3,
     "name": "T-Shirt Hello World",
     "description": "Remera 100% algodón para programadores.",
-    "price": 25.00,
+    "price": 25,
     "discount": 0,
     "image": "remera.jpg",
     "category": "ropa"
@@ -30,9 +30,18 @@
     "id": 4,
     "name": "Lentes Blue Light",
     "description": "Protege tu vista de la luz azul de los monitores.",
-    "price": 30.00,
+    "price": 30,
     "discount": 5,
     "image": "lentes.jpg",
     "category": "accesorios"
+  },
+  {
+    "id": 5,
+    "name": "Auricularez ZEUS PRO",
+    "price": 150000,
+    "discount": 0,
+    "category": "perifericos",
+    "description": "Auriculares inalambricos Redragon Zeus PRO",
+    "image": "product-1770908502988.avif"
   }
 ]
