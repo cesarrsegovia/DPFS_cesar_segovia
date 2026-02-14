@@ -10,4 +10,7 @@ const usersController = require('../controllers/usersController');
 router.get('/login', usersController.login);      // URL final: /users/login
 router.get('/register', usersController.register); // URL final: /users/register
 
+// NUEVA RUTA: Para PROCESAR el formulario de registro (POST)
+router.post('/register', usersController.processRegister);
+
 module.exports = router;

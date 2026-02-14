@@ -8,6 +8,8 @@ const productsRoutes = require('./routes/products');
 const usersRoutes = require('./routes/users');
 
 const app = express();
+app.use(express.urlencoded({ extended: false })); 
+app.use(express.json());
 
 // Configuración de la carpeta pública (Imágenes y CSS)
 // Le decimos a Express: "Todo lo que esté en 'public', sírvelo directo"

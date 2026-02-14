@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "email": "cesar@test.com",
+    "password": "$2b$10$LW0PtMcVKGlND35l1D3xfu/OW6idPQR9o1qR1W3q3b9cLSjkFKo2i",
+    "rol": "user"
+  },
+  {
+    "id": 2,
+    "email": "cesar@test.com",
+    "password": "$2b$10$J9.bFrZVPIFoQxj/KFKnA.UeXgWKlJ.ii7uRw8O.Q2/HZ.VPskSya",
+    "rol": "user"
+  }
+]
