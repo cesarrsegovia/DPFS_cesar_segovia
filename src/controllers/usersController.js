@@ -52,6 +52,29 @@ const controller = {
 
         // 6. ¡Éxito! Lo redirigimos al login para que inicie sesión
         res.redirect('/users/login');
+    },
+    // --- PROCESAR LOGIN ---
+    processLogin: (req, res) => {
+        // 1. Traemos a todos los usuarios
+        const users = getUsers();
+
+        // 2. Buscamos si existe alguien con el email que escribieron en el formulario
+        const userToLogin = users.find(user => user.email === req.body.email);
+
+        if (userToLogin) {
+            // 3. Si el correo existe, comparamos la contraseña
+            // compareSync toma la contraseña normal (ej: 123456) y la compara con la encriptada
+            const isPasswordValid = bcrypt.compareSync(req.body.password, userToLogin.password);
+
+            if (isPasswordValid) {
+                // ¡ÉXITO! La contraseña es correcta
+                // (Por ahora mostramos un mensaje, luego lo mejoraremos)
+                return res.send('¡Bienvenido de nuevo, ' + userToLogin.name + '! 🎉 Login exitoso.');
+            }
+        }
+
+        // 4. Si el correo no existe o la contraseña es incorrecta
+        return res.send('Error: Credenciales inválidas. ❌');
     }
 };
 

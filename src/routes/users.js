@@ -12,5 +12,7 @@ router.get('/register', usersController.register); // URL final: /users/register
 
 // NUEVA RUTA: Para PROCESAR el formulario de registro (POST)
 router.post('/register', usersController.processRegister);
+// NUEVA RUTA: Para PROCESAR el formulario de login (POST)
+router.post('/login', usersController.processLogin);
 
 module.exports = router;
