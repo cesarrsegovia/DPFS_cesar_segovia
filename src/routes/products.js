@@ -4,6 +4,8 @@ const path = require('path');
 const multer = require('multer'); // Importamos la librería que acabamos de instalar
 
 const productsController = require('../controllers/productsController');
+// 1. IMPORTAMOS AL NUEVO GUARDIA
+const adminMiddleware = require('../middlewares/adminMiddleware');
 
 // --- CONFIGURACIÓN DE MULTER (Carga de archivos) ---
 const storage = multer.diskStorage({
@@ -23,25 +25,21 @@ const upload = multer({ storage: storage });
 
 // --- RUTAS ---
 
-// 1. Listado y Detalle (Ya las tienes)
-router.get('/detail/:id', productsController.detail);
+// Rutas Públicas (Cualquiera entra)
+router.get('/', productsController.index);
 router.get('/cart', productsController.cart);
+router.get('/detail/:id', productsController.detail);
 
-// 2. Creación (Formulario) -> Ya la tienes
-router.get('/create', productsController.create);
+// 👇 2. USAMOS adminMiddleware EN LUGAR DE authMiddleware
+// CREATE
+router.get('/create', adminMiddleware, productsController.create);
+router.post('/', adminMiddleware, upload.single('image'), productsController.store);
 
-// 3. ACCIÓN DE CREACIÓN (Donde se envía el formulario)
-// ¡Fíjate! Usamos upload.single('image') porque el input del formulario se llama name="image"
-router.post('/', upload.single('image'), productsController.store);
+// EDIT & UPDATE
+router.get('/edit/:id', adminMiddleware, productsController.edit);
+router.put('/:id', adminMiddleware, upload.single('image'), productsController.update);
 
-// 4. Edición (Formulario) -> Ya la tienes
-router.get('/edit/:id', productsController.edit);
-
-// NUEVA RUTA PUT
-// Usamos upload.single por si quiere cambiar la foto
-router.put('/:id', upload.single('image'), productsController.update);
-
-// NUEVA RUTA DELETE
-router.delete('/:id', productsController.destroy);
+// DELETE
+router.delete('/:id', adminMiddleware, productsController.destroy);
 
 module.exports = router;

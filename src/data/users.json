@@ -3,7 +3,7 @@
     "id": 1,
     "email": "cesar@test.com",
     "password": "$2b$10$LW0PtMcVKGlND35l1D3xfu/OW6idPQR9o1qR1W3q3b9cLSjkFKo2i",
-    "rol": "user",
+    "rol": "admin",
     "name": "César Segovia"
   },
   {

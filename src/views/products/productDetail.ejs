@@ -66,26 +66,31 @@
 
                         <button type="submit" class="btn-primary" style="width: 100%;">AGREGAR AL CARRITO</button>
                     </form>
-                    <div class="admin-actions" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
-                        <h4 style="color: #666; margin-bottom: 10px; font-size: 0.9rem;">Panel de Administración:</h4>
+                    <% if (locals.isLogged && locals.userLogged.rol==='admin' ) { %>
 
-                        <a href="/products/edit/<%= product.id %>" class="btn-edit" style="margin-bottom: 10px;">
-                            <i class="fas fa-edit"></i> EDITAR PRODUCTO
-                        </a>
+                        <div class="admin-actions"
+                            style="margin-top: 20px; border-top: 1px solid #333; padding-top: 20px;">
+                            <h4 style="color: #666; margin-bottom: 10px; font-size: 0.9rem;">Panel de Administración:
+                            </h4>
 
-                        <form action="/products/<%= product.id %>?_method=DELETE" method="POST"
-                            onsubmit="return confirm('⚠️ ¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.')">
+                            <a href="/products/edit/<%= product.id %>" class="btn-edit" style="margin-bottom: 10px;">
+                                <i class="fas fa-edit"></i> EDITAR PRODUCTO
+                            </a>
 
-                            <button type="submit" class="btn-delete">
-                                <i class="fas fa-trash-alt"></i> ELIMINAR PRODUCTO
-                            </button>
-                        </form>
-                    </div>
+                            <form action="/products/<%= product.id %>?_method=DELETE" method="POST"
+                                onsubmit="return confirm('⚠️ ¿Estás seguro?')">
+                                <button type="submit" class="btn-delete">
+                                    <i class="fas fa-trash-alt"></i> ELIMINAR PRODUCTO
+                                </button>
+                            </form>
+                        </div>
 
-                    <div class="security-info">
-                        <p><i class="fas fa-shield-alt"></i> Garantía oficial de 12 meses</p>
-                        <p><i class="fas fa-truck"></i> Envío gratis a todo el país</p>
-                    </div>
+                        <% } %>
+
+                            <div class="security-info">
+                                <p><i class="fas fa-shield-alt"></i> Garantía oficial de 12 meses</p>
+                                <p><i class="fas fa-truck"></i> Envío gratis a todo el país</p>
+                            </div>
 
                 </div>
             </section>

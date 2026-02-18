@@ -4,16 +4,18 @@ const router = express.Router();
 
 // 1. Importamos el controlador
 const usersController = require('../controllers/usersController');
+// 1. IMPORTAMOS AL GUARDIA
+const guestMiddleware = require('../middlewares/guestMiddleware');
 
 // 2. Definimos las rutas
-// Como en app.js diremos que todo esto empieza con "/users", aquí solo ponemos la parte final
-router.get('/login', usersController.login);      // URL final: /users/login
-router.get('/register', usersController.register); // URL final: /users/register
+// 2. LO PONEMOS EN EL MEDIO DE LA RUTA (Entre la URL y el Controlador)
+// Fíjate cómo lo agregamos como segundo parámetro
+router.get('/login', guestMiddleware, usersController.login);
+router.get('/register', guestMiddleware, usersController.register);
 
-// NUEVA RUTA: Para PROCESAR el formulario de registro (POST)
-router.post('/register', usersController.processRegister);
-// NUEVA RUTA: Para PROCESAR el formulario de login (POST)
-router.post('/login', usersController.processLogin);
+// Para procesar los datos también lo ponemos (por seguridad extra)
+router.post('/login', guestMiddleware, usersController.processLogin);
+router.post('/register', guestMiddleware, usersController.processRegister);
 router.get('/logout', usersController.logout);
 
 module.exports = router;
