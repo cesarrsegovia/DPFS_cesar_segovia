@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
+const session = require('express-session');
 
 // SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
@@ -23,6 +24,27 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // --- RUTAS TEMPORALES (Para probar que funciona) ---
+
+// 2. CONFIGURAR LA SESIÓN (Debe ir ANTES de las rutas)
+app.use(session({
+    secret: 'MiSecretoSuperSeguro123', // Una llave secreta para proteger la sesión
+    resave: false,
+    saveUninitialized: false
+}));
+
+// 3. MIDDLEWARE GLOBAL (El puente entre la sesión y tus vistas EJS)
+// Esto debe ir JUSTO DEBAJO de la configuración de la sesión
+app.use((req, res, next) => {
+    // Por defecto, decimos que nadie está logueado
+    res.locals.isLogged = false; 
+
+    // Si detectamos a alguien en la memoria de la sesión...
+    if (req.session && req.session.userLogged) {
+        res.locals.isLogged = true; // Cambiamos a verdadero
+        res.locals.userLogged = req.session.userLogged; // Pasamos sus datos a EJS
+    }
+    next();
+});
 
 // USAR LAS RUTAS
 app.use('/', mainRoutes);

@@ -4,15 +4,28 @@
             <h2 style="color:var(--accent);"><i class="fas fa-code"></i> DevStyle</h2>
         </a>
     </div>
-    
+
     <form class="search-bar" action="/" method="GET">
         <input type="text" placeholder="Buscar productos...">
         <button type="submit"><i class="fas fa-search"></i></button>
     </form>
-    
+
     <nav class="user-nav">
-        <a href="/users/register"><i class="fas fa-user-plus"></i> Registro</a>
-        <a href="/users/login"><i class="fas fa-sign-in-alt"></i> Login</a>
-        <a href="/products/cart"><i class="fas fa-shopping-cart"></i></a>
+        <div class="user-actions">
+
+            <% if (locals.isLogged) { %>
+                <span style="color: var(--accent); margin-right: 15px; font-weight: bold;">
+                    ¡Hola, <%= locals.userLogged.name %>! 👋
+                </span>
+                <a href="/users/logout" class="btn-login" style="background-color: #ff4757;"><i
+                        class="fas fa-sign-out-alt"></i> Salir</a>
+
+                <% } else { %>
+                    <a href="/users/register" class="btn-register"><i class="fas fa-user-plus"></i> Registro</a>
+                    <a href="/users/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <% } %>
+
+                        <a href="/products/cart" class="btn-cart"><i class="fas fa-shopping-cart"></i></a>
+        </div>
     </nav>
 </header>

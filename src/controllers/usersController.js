@@ -39,9 +39,9 @@ const controller = {
             // 🔒 ¡LA MAGIA! Encriptamos la contraseña antes de guardarla
             // El número 10 es el "salt" (el nivel de seguridad de la encriptación)
             password: bcrypt.hashSync(req.body.password, 10),
-            
+
             // Le damos rol de 'user' por defecto a todos los que se registran
-            rol: 'user' 
+            rol: 'user'
         };
 
         // 4. Lo agregamos a la lista
@@ -62,14 +62,19 @@ const controller = {
         const userToLogin = users.find(user => user.email === req.body.email);
 
         if (userToLogin) {
-            // 3. Si el correo existe, comparamos la contraseña
-            // compareSync toma la contraseña normal (ej: 123456) y la compara con la encriptada
             const isPasswordValid = bcrypt.compareSync(req.body.password, userToLogin.password);
 
             if (isPasswordValid) {
-                // ¡ÉXITO! La contraseña es correcta
-                // (Por ahora mostramos un mensaje, luego lo mejoraremos)
-                return res.send('¡Bienvenido de nuevo, ' + userToLogin.name + '! 🎉 Login exitoso.');
+                // --- NUEVO CÓDIGO DE SESIÓN ---
+
+                // 1. Por seguridad, borramos la contraseña del objeto antes de guardarlo en memoria
+                delete userToLogin.password;
+
+                // 2. ¡Guardamos al usuario en la sesión!
+                req.session.userLogged = userToLogin;
+
+                // 3. Lo redirigimos al Home
+                return res.redirect('/');
             }
         }
 
