@@ -28,6 +28,17 @@ const controller = {
         // 1. Leemos los usuarios actuales
         const users = getUsers();
 
+        // verificar email duplicado
+        const userExists = users.find(user => user.email === req.body.email);
+        if (userExists) {
+            // Si encuentra un usuario con ese correo, cortamos la ejecución aquí
+            return res.send('Error: Este correo electrónico ya se encuentra registrado. ❌');
+        }
+
+        if (userExists) {
+            return res.send('Error: El correo ya está registrado. ❌');
+        }
+
         // 2. Generamos un ID nuevo
         const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
 
@@ -80,6 +91,14 @@ const controller = {
 
         // 4. Si el correo no existe o la contraseña es incorrecta
         return res.send('Error: Credenciales inválidas. ❌');
+    },
+    // --- CERRAR SESIÓN ---
+    logout: (req, res) => {
+        // 1. Destruimos la memoria temporal (la sesión)
+        req.session.destroy();
+        
+        // 2. Redirigimos al usuario a la página de inicio
+        return res.redirect('/');
     }
 };
 
