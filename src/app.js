@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 // SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
@@ -23,7 +24,7 @@ app.set('view engine', 'ejs');
 // Le decimos dónde están las vistas (ahora dentro de src/views)
 app.set('views', path.join(__dirname, 'views'));
 
-// --- RUTAS TEMPORALES (Para probar que funciona) ---
+app.use(cookieParser());
 
 // 2. CONFIGURAR LA SESIÓN (Debe ir ANTES de las rutas)
 app.use(session({

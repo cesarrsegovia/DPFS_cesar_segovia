@@ -66,31 +66,39 @@ const controller = {
     },
     // --- PROCESAR LOGIN ---
     processLogin: (req, res) => {
-        // 1. Traemos a todos los usuarios
         const users = getUsers();
-
-        // 2. Buscamos si existe alguien con el email que escribieron en el formulario
-        const userToLogin = users.find(user => user.email === req.body.email);
+        const userToLogin = users.find(user => user.email == req.body.email);
 
         if (userToLogin) {
-            const isPasswordValid = bcrypt.compareSync(req.body.password, userToLogin.password);
-
-            if (isPasswordValid) {
-                // --- NUEVO CÓDIGO DE SESIÓN ---
-
-                // 1. Por seguridad, borramos la contraseña del objeto antes de guardarlo en memoria
+            let isOk = bcrypt.compareSync(req.body.password, userToLogin.password);
+            
+            if (isOk) {
                 delete userToLogin.password;
-
-                // 2. ¡Guardamos al usuario en la sesión!
                 req.session.userLogged = userToLogin;
 
-                // 3. Lo redirigimos al Home
+                // 🍪 NUEVO: LÓGICA DE COOKIES 🍪
+                // Si en el formulario llegó el checkbox marcado...
+                if (req.body.remember_user) {
+                    // Creamos una cookie llamada 'userEmail' con el email del usuario
+                    // maxAge: Duración en milisegundos (Aquí: 1 hora)
+                    res.cookie('userEmail', req.body.email, { maxAge: (1000 * 60) * 60 });
+                }
+
                 return res.redirect('/');
             }
+            
+            return res.render('users/login', {
+                errors: {
+                    email: { msg: 'Las credenciales son inválidas' }
+                }
+            });
         }
 
-        // 4. Si el correo no existe o la contraseña es incorrecta
-        return res.send('Error: Credenciales inválidas. ❌');
+        return res.render('users/login', {
+            errors: {
+                email: { msg: 'No se encuentra este email en nuestra base de datos' }
+            }
+        });
     },
     // --- CERRAR SESIÓN ---
     logout: (req, res) => {
