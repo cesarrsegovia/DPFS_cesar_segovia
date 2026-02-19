@@ -3,6 +3,7 @@ const path = require('path');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
 
 // SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
@@ -34,18 +35,8 @@ app.use(session({
 }));
 
 // 3. MIDDLEWARE GLOBAL (El puente entre la sesión y tus vistas EJS)
-// Esto debe ir JUSTO DEBAJO de la configuración de la sesión
-app.use((req, res, next) => {
-    // Por defecto, decimos que nadie está logueado
-    res.locals.isLogged = false; 
-
-    // Si detectamos a alguien en la memoria de la sesión...
-    if (req.session && req.session.userLogged) {
-        res.locals.isLogged = true; // Cambiamos a verdadero
-        res.locals.userLogged = req.session.userLogged; // Pasamos sus datos a EJS
-    }
-    next();
-});
+// Debe ir DESPUÉS de session() y cookieParser()
+app.use(userLoggedMiddleware);
 
 // USAR LAS RUTAS
 app.use('/', mainRoutes);

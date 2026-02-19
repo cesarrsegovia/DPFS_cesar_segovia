@@ -12,12 +12,25 @@
     "password": "$2b$10$J9.bFrZVPIFoQxj/KFKnA.UeXgWKlJ.ii7uRw8O.Q2/HZ.VPskSya",
     "rol": "user"
   },
-  
   {
     "id": 4,
     "name": "anto heredia",
     "email": "anto@test.com",
     "password": "$2b$10$nHzRqRNRr8UO9oCi5cwXHu4mDGGu07mLZF.qg0vGJXxT9Vwt/T3KW",
+    "rol": "user"
+  },
+  {
+    "id": 5,
+    "name": "cesarseg",
+    "email": "cesar@gg.com",
+    "password": "$2b$10$Ux2f7tl8qgbZOVyr.ocWvOuTA1LpPE.sKG7C0iDPzPh3lWrGYLUxW",
+    "rol": "user"
+  },
+  {
+    "id": 6,
+    "name": "viggo",
+    "email": "viggo@asd.com",
+    "password": "$2b$10$yJc1CwmWYBkqxh6eYSlqKuKu2RKLSXbGWQhSq/lwGVzxCcAwdieaq",
     "rol": "user"
   }
 ]

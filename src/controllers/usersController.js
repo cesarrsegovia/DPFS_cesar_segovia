@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs'); // Importamos la librería de seguridad
+const { validationResult } = require('express-validator');
 
 // Ruta al JSON de usuarios
 const usersFilePath = path.join(__dirname, '../data/users.json');
@@ -25,6 +26,18 @@ const controller = {
 
     // --- PROCESAR REGISTRO ---
     processRegister: (req, res) => {
+        //  PEDIMOS LOS RESULTADOS DE LA VALIDACIÓN
+        const resultValidation = validationResult(req);
+
+        // 3. SI HAY ERRORES...
+        if (resultValidation.errors.length > 0) {
+            return res.render('users/register', {
+                // Pasamos los errores convertidos en objeto (mapped) para fácil uso en EJS
+                errors: resultValidation.mapped(),
+                // ¡IMPORTANTE! Pasamos lo que el usuario escribió (oldData) para no borrarlo
+                oldData: req.body 
+            });
+        }
         // 1. Leemos los usuarios actuales
         const users = getUsers();
 
@@ -102,10 +115,13 @@ const controller = {
     },
     // --- CERRAR SESIÓN ---
     logout: (req, res) => {
-        // 1. Destruimos la memoria temporal (la sesión)
+        // 1. Borramos la cookie de "Recordarme"
+        res.clearCookie('userEmail'); 
+        
+        // 2. Destruimos la sesión del servidor
         req.session.destroy();
         
-        // 2. Redirigimos al usuario a la página de inicio
+        // 3. ¡Adiós!
         return res.redirect('/');
     }
 };
