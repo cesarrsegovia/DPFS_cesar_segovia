@@ -1,4 +1,5 @@
 // src/controllers/productsController.js
+const { validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
 
@@ -44,6 +45,23 @@ const controller = {
 
     // --- LÓGICA DE GUARDADO (STORE) ---
     store: (req, res) => {
+        // 1. ATRAPAMOS ERRORES
+        const resultValidation = validationResult(req);
+
+        if (resultValidation.errors.length > 0) {
+            // 🚨 SI HAY ERRORES:
+            
+            // A) Si subió una imagen, hay que borrarla para no llenar el servidor de basura
+            if (req.file) {
+                fs.unlinkSync(path.join(__dirname, '../../public/images/products', req.file.filename));
+            }
+
+            // B) Volvemos al formulario con los errores y los datos viejos
+            return res.render('products/productCreate', {
+                errors: resultValidation.mapped(),
+                oldData: req.body
+            });
+        }
         // 1. Leemos todos los productos actuales
         const products = getProducts();
 

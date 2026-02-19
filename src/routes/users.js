@@ -17,13 +17,19 @@ const registerValidations = [
     body('password').notEmpty().withMessage('La contraseña no puede estar vacía'),
 ];
 
+const loginValidations = [
+    body('email')
+        .notEmpty().withMessage('Debes escribir un correo electrónico').bail()
+        .isEmail().withMessage('Debes escribir un formato de correo válido'),
+    body('password').notEmpty().withMessage('Debes escribir tu contraseña')
+];
 // Definimos las rutas
 // 2. LO PONEMOS EN EL MEDIO DE LA RUTA (Entre la URL y el Controlador)
 router.get('/login', guestMiddleware, usersController.login);
 router.get('/register', guestMiddleware, usersController.register);
 
 // Para procesar los datos también lo ponemos (por seguridad extra)
-router.post('/login', guestMiddleware, usersController.processLogin);
+router.post('/login', guestMiddleware, loginValidations, usersController.processLogin);
 router.post('/register', guestMiddleware, registerValidations, usersController.processRegister);
 router.get('/logout', usersController.logout);
 

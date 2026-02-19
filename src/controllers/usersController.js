@@ -79,6 +79,15 @@ const controller = {
     },
     // --- PROCESAR LOGIN ---
     processLogin: (req, res) => {
+        // 1. VALIDACIÓN DE FORMULARIO (Campos vacíos o mal formato)
+        const resultValidation = validationResult(req);
+
+        if (resultValidation.errors.length > 0) {
+            return res.render('users/login', {
+                errors: resultValidation.mapped(),
+                oldData: req.body
+            });
+        }
         const users = getUsers();
         const userToLogin = users.find(user => user.email == req.body.email);
 

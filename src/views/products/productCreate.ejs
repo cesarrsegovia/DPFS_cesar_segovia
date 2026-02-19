@@ -1,78 +1,103 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <%- include('../partials/head') %>
 </head>
+
 <body>
 
     <%- include('../partials/header') %>
 
-    <main class="auth-container">
-        <section class="auth-box" style="max-width: 800px;">
-            <h2>Crear Nuevo Producto 📦</h2>
-            
-            <form action="/products" method="POST" enctype="multipart/form-data">
-                
-                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 2; min-width: 300px;">
-                        <label for="name">Nombre del Producto</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-tag"></i>
-                            <input type="text" id="name" name="name" placeholder="Ej: Teclado Mecánico" required>
+        <main class="auth-container">
+            <section class="auth-box" style="max-width: 800px;">
+                <h2>Crear Nuevo Producto 📦</h2>
+
+                <form action="/products" method="POST" enctype="multipart/form-data">
+
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div class="form-group">
+                            <label for="name">Nombre del Producto</label>
+
+                            <div class="input-wrapper">
+                                <input type="text" id="name" name="name" class="form-input"
+                                    value="<%= locals.oldData ? oldData.name : null %>">
+                            </div>
+                            <% if (locals.errors && errors.name) { %>
+                                <div class="text-danger">
+                                    <%= errors.name.msg %>
+                                </div>
+                                <% } %>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Precio del Producto</label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-dollar-sign"></i>
+                                <input type="number" id="price" name="price" step="0.01" placeholder="Ej: 1500" /* 1.
+                                    PERSISTENCIA: Si hay dato viejo, ponlo */
+                                    value="<%= locals.oldData ? oldData.price : null %>" class="form-input">
+                            </div>
+
+                            <% if (locals.errors && errors.price) { %>
+                                <div class="text-danger">
+                                    <%= errors.price.msg %>
+                                </div>
+                                <% } %>
                         </div>
                     </div>
 
-                    <div class="form-group" style="flex: 1; min-width: 150px;">
-                        <label for="price">Precio</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-dollar-sign"></i>
-                            <input type="number" id="price" name="price" placeholder="0.00" step="0.01" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="description">Descripción</label>
+                        <textarea name="description" id="description" rows="4"
+                            style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"
+                            placeholder="Escribe los detalles del producto..."></textarea>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="description">Descripción</label>
-                    <textarea name="description" id="description" rows="4" 
-                        style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"
-                        placeholder="Escribe los detalles del producto..."></textarea>
-                </div>
-
-                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                    <div class="form-group" style="flex: 1;">
-                        <label for="category">Categoría</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-list"></i>
-                            <select name="category" id="category" 
-                                style="width: 100%; background: transparent; border: none; color: white; outline: none; padding-left: 10px;">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div class="form-group">
+                            <label for="category">Categoría</label>
+                            <select name="category" id="category" class="form-input">
                                 <option value="" disabled selected>Selecciona una...</option>
-                                <option value="perifericos">Periféricos</option>
-                                <option value="ropa">Ropa</option>
-                                <option value="libros">Libros</option>
-                                <option value="deco">Decoración</option>
+
+                                <option value="in-sale" <%=locals.oldData && oldData.category==='in-sale' ? 'selected'
+                                    : '' %>>En oferta</option>
+                                <option value="visited" <%=locals.oldData && oldData.category==='visited' ? 'selected'
+                                    : '' %>>Últimos agregados</option>
                             </select>
+
+                            <% if (locals.errors && errors.category) { %>
+                                <div class="text-danger">
+                                    <%= errors.category.msg %>
+                                </div>
+                                <% } %>
                         </div>
                     </div>
 
-                    <div class="form-group" style="flex: 1;">
+                    <div class="form-group">
                         <label for="image">Imagen del Producto</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-image"></i>
-                            <input type="file" id="image" name="image" accept="image/*" required 
-                                style="padding-top: 10px;"> </div>
+                        <input type="file" id="image" name="image" class="form-input">
+
+                        <% if (locals.errors && errors.image) { %>
+                            <div class="text-danger">
+                                <%= errors.image.msg %>
+                            </div>
+                            <% } %>
                     </div>
-                </div>
+                    </div>
 
-                <div style="margin-top: 20px;">
-                    <button type="submit" class="btn-primary">GUARDAR PRODUCTO</button>
-                    <a href="/" style="display: block; text-align: center; margin-top: 15px; color: var(--text-gray); font-size: 0.9rem;">Cancelar</a>
-                </div>
+                    <div style="margin-top: 20px;">
+                        <button type="submit" class="btn-primary">GUARDAR PRODUCTO</button>
+                        <a href="/"
+                            style="display: block; text-align: center; margin-top: 15px; color: var(--text-gray); font-size: 0.9rem;">Cancelar</a>
+                    </div>
 
-            </form>
-        </section>
-    </main>
+                </form>
+            </section>
+        </main>
 
-    <%- include('../partials/footer') %>
+        <%- include('../partials/footer') %>
 
 </body>
+
 </html>
