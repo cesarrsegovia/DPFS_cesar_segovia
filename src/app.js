@@ -10,6 +10,18 @@ const mainRoutes = require('./routes/main');
 const productsRoutes = require('./routes/products');
 const usersRoutes = require('./routes/users');
 
+// 👇 IMPORTAMOS LA BASE DE DATOS 
+const db = require('../models');
+
+// 👇 PROBAMOS LA CONEXIÓN
+db.sequelize.authenticate()
+    .then(() => {
+        console.log('🐘 ¡Conexión a PostgreSQL exitosa! La magia de Sequelize funciona.');
+    })
+    .catch((error) => {
+        console.error('❌ Error al conectar con la base de datos:', error);
+    });
+
 const app = express();
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.json());

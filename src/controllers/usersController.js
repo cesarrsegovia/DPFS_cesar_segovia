@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcryptjs'); // Importamos la librería de seguridad
 const { validationResult } = require('express-validator');
+const db = require('../../models'); // Importamos toda la base de datos
 
 // Ruta al JSON de usuarios
 const usersFilePath = path.join(__dirname, '../data/users.json');
@@ -25,102 +26,106 @@ const controller = {
     },
 
     // --- PROCESAR REGISTRO ---
-    processRegister: (req, res) => {
-        //  PEDIMOS LOS RESULTADOS DE LA VALIDACIÓN
+    processRegister: async (req, res) => { 
+        
+        // 1. Validación de express-validator (ESTO QUEDA IGUAL)
         const resultValidation = validationResult(req);
-
-        // 3. SI HAY ERRORES...
         if (resultValidation.errors.length > 0) {
             return res.render('users/register', {
-                // Pasamos los errores convertidos en objeto (mapped) para fácil uso en EJS
                 errors: resultValidation.mapped(),
-                // ¡IMPORTANTE! Pasamos lo que el usuario escribió (oldData) para no borrarlo
-                oldData: req.body 
+                oldData: req.body
             });
         }
-        // 1. Leemos los usuarios actuales
-        const users = getUsers();
 
-        // verificar email duplicado
-        const userExists = users.find(user => user.email === req.body.email);
-        if (userExists) {
-            // Si encuentra un usuario con ese correo, cortamos la ejecución aquí
-            return res.send('Error: Este correo electrónico ya se encuentra registrado. ❌');
+        // --- ADIÓS JSON, HOLA POSTGRES ---
+        try {
+            // 2. Verificamos si el email ya existe en Postgres
+            const userExists = await db.User.findOne({ 
+                where: { email: req.body.email } 
+            });
+
+            if (userExists) {
+                return res.render('users/register', {
+                    errors: { email: { msg: 'Este correo ya está registrado' } },
+                    oldData: req.body
+                });
+            }
+
+            // 3. Si no existe, CREAMOS el usuario en la base de datos
+            await db.User.create({
+                name: req.body.name,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password, 10),
+                rol: 'user'
+            });
+
+            // 4. Redirigimos al login
+            return res.redirect('/users/login');
+
+        } catch (error) {
+            // Si algo falla con la base de datos, lo vemos en la terminal
+            console.error('Error al guardar el usuario:', error);
+            return res.send('Ocurrió un error en la base de datos.');
         }
-
-        if (userExists) {
-            return res.send('Error: El correo ya está registrado. ❌');
-        }
-
-        // 2. Generamos un ID nuevo
-        const newId = users.length > 0 ? users[users.length - 1].id + 1 : 1;
-
-        // 3. Creamos el objeto del nuevo usuario
-        const newUser = {
-            id: newId,
-            name: req.body.name,
-            email: req.body.email,
-            // 🔒 ¡LA MAGIA! Encriptamos la contraseña antes de guardarla
-            // El número 10 es el "salt" (el nivel de seguridad de la encriptación)
-            password: bcrypt.hashSync(req.body.password, 10),
-
-            // Le damos rol de 'user' por defecto a todos los que se registran
-            rol: 'user'
-        };
-
-        // 4. Lo agregamos a la lista
-        users.push(newUser);
-
-        // 5. Sobrescribimos el archivo JSON
-        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
-
-        // 6. ¡Éxito! Lo redirigimos al login para que inicie sesión
-        res.redirect('/users/login');
     },
     // --- PROCESAR LOGIN ---
-    processLogin: (req, res) => {
-        // 1. VALIDACIÓN DE FORMULARIO (Campos vacíos o mal formato)
+    // 👇 ¡AGREGA ASYNC AQUÍ! 👇
+    processLogin: async (req, res) => {
+        
+        // 1. Validaciones (QUEDA IGUAL)
         const resultValidation = validationResult(req);
-
         if (resultValidation.errors.length > 0) {
             return res.render('users/login', {
                 errors: resultValidation.mapped(),
                 oldData: req.body
             });
         }
-        const users = getUsers();
-        const userToLogin = users.find(user => user.email == req.body.email);
 
-        if (userToLogin) {
-            let isOk = bcrypt.compareSync(req.body.password, userToLogin.password);
-            
-            if (isOk) {
-                delete userToLogin.password;
-                req.session.userLogged = userToLogin;
-
-                // 🍪 NUEVO: LÓGICA DE COOKIES 🍪
-                // Si en el formulario llegó el checkbox marcado...
-                if (req.body.remember_user) {
-                    // Creamos una cookie llamada 'userEmail' con el email del usuario
-                    // maxAge: Duración en milisegundos (Aquí: 1 hora)
-                    res.cookie('userEmail', req.body.email, { maxAge: (1000 * 60) * 60 });
-                }
-
-                return res.redirect('/');
-            }
-            
-            return res.render('users/login', {
-                errors: {
-                    email: { msg: 'Las credenciales son inválidas' }
-                }
+        // --- ADIÓS JSON, BUSCAMOS EN POSTGRES ---
+        try {
+            // 2. Buscamos al usuario por su email en la Base de Datos
+            const userToLogin = await db.User.findOne({ 
+                where: { email: req.body.email } 
             });
-        }
 
-        return res.render('users/login', {
-            errors: {
-                email: { msg: 'No se encuentra este email en nuestra base de datos' }
+            // Si el usuario existe, verificamos la contraseña
+            if (userToLogin) {
+                const isOkThePassword = bcrypt.compareSync(req.body.password, userToLogin.password);
+                
+                if (isOkThePassword) {
+                    // ¡Todo correcto! Borramos el password por seguridad antes de guardar en sesión
+                    // (En Sequelize, los datos reales vienen dentro de .dataValues)
+                    delete userToLogin.dataValues.password;
+                    
+                    // Guardamos al usuario en la sesión
+                    req.session.userLogged = userToLogin.dataValues;
+
+                    // Lógica de "Recordarme" (Cookie)
+                    if (req.body.remember_user) {
+                        res.cookie('userEmail', req.body.email, { maxAge: 1000 * 60 * 60 });
+                    }
+
+                    // Redirigimos al inicio (o al perfil)
+                    return res.redirect('/'); 
+                }
+
+                // Si la contraseña está mal
+                return res.render('users/login', {
+                    errors: { email: { msg: 'Las credenciales son inválidas' } },
+                    oldData: req.body
+                });
             }
-        });
+
+            // Si el email no se encontró en la BD
+            return res.render('users/login', {
+                errors: { email: { msg: 'No se encuentra este email en nuestra base de datos' } },
+                oldData: req.body
+            });
+
+        } catch (error) {
+            console.error('Error en el login:', error);
+            return res.send('Ocurrió un error en la base de datos.');
+        }
     },
     // --- CERRAR SESIÓN ---
     logout: (req, res) => {
