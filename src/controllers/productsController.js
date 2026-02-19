@@ -2,6 +2,7 @@
 const { validationResult } = require('express-validator');
 const fs = require('fs');
 const path = require('path');
+const db = require('../../models'); // Importamos la base de datos
 
 // 1. Leemos el JSON de productos (igual que hiciste en mainController)
 const productsFilePath = path.join(__dirname, '../data/products.json');
@@ -17,23 +18,25 @@ const getProducts = () => {
 const controller = {
     // Listado de productos (el Home muestra destacados, pero quizás quieras una lista completa luego)
     index: (req, res) => {
-        // Por ahora lo mandamos al index, o creamos una vista 'products/list'
-        res.render('products/productCart'); // Ejemplo temporal
+        // Como los productos se ven en el Home, redirigimos hacia allá
+        return res.redirect('/');
     },
-    detail: (req, res) => {
-    // 1. LLAMAMOS A LA FUNCIÓN PARA TRAER LOS DATOS
-    const products = getProducts();
-
-    // 2. Ahora sí buscamos
-    const id = req.params.id;
-    const product = products.find(product => product.id == id);
-
-    if (product) {
-        res.render('products/productDetail', { product: product });
-    } else {
-        res.send("Producto no encontrado");
-    }
-},
+    // 👇 NO OLVIDES EL ASYNC 👇
+    detail: async (req, res) => {
+        try {
+            // Buscamos UN SOLO producto por el ID que viene en la URL
+            const product = await db.Product.findByPk(req.params.id);
+            
+            if (product) {
+                return res.render('products/productDetail', { product });
+            } else {
+                return res.send('Producto no encontrado');
+            }
+        } catch (error) {
+            console.error('Error al mostrar el detalle:', error);
+            return res.send('Error de base de datos');
+        }
+    },
     cart: (req, res) => {
         res.render('products/productCart');
     },
@@ -43,90 +46,100 @@ const controller = {
         res.render('products/productCreate'); 
     },
 
-    // --- LÓGICA DE GUARDADO (STORE) ---
-    store: (req, res) => {
-        // 1. ATRAPAMOS ERRORES
+    // 👇 ¡AGREGAMOS ASYNC AQUÍ! 👇
+    store: async (req, res) => {
+        // 1. VALIDACIONES (Esto queda igual que antes)
         const resultValidation = validationResult(req);
 
         if (resultValidation.errors.length > 0) {
-            // 🚨 SI HAY ERRORES:
-            
-            // A) Si subió una imagen, hay que borrarla para no llenar el servidor de basura
             if (req.file) {
-                fs.unlinkSync(path.join(__dirname, '../../public/images/products', req.file.filename));
+                // Usamos directamente req.file.path
+                fs.unlinkSync(req.file.path); 
             }
-
-            // B) Volvemos al formulario con los errores y los datos viejos
             return res.render('products/productCreate', {
                 errors: resultValidation.mapped(),
                 oldData: req.body
             });
         }
-        // 1. Leemos todos los productos actuales
-        const products = getProducts();
 
-        // 2. Generamos un ID nuevo (Tomamos el último ID y le sumamos 1)
-        // Si no hay productos, el ID es 1
-        const newId = products.length > 0 ? products[products.length - 1].id + 1 : 1;
+        // --- ADIÓS JSON, HOLA POSTGRES ---
+        try {
+            // 2. CREAMOS EL PRODUCTO EN LA BASE DE DATOS
+            await db.Product.create({
+                name: req.body.name,
+                price: req.body.price,
+                description: req.body.description,
+                category: req.body.category,
+                // Si subió imagen, guardamos el nombre. Si no, una por defecto.
+                image: req.file ? req.file.filename : 'default-image.png' 
+            });
 
-        // 3. Creamos el objeto nuevo producto
-        const newProduct = {
-            id: newId,
-            name: req.body.name,          // Viene del input name="name"
-            price: Number(req.body.price),// Convertimos a número
-            discount: 0,                  // Por defecto 0
-            category: req.body.category,
-            description: req.body.description,
-            // Si subió imagen, usamos el nombre del archivo. Si no, una por defecto.
-            image: req.file ? req.file.filename : 'default-image.png'
-        };
+            // 3. Redirigimos al listado de productos
+            return res.redirect('/products');
 
-        // 4. Agregamos el nuevo producto al array
-        products.push(newProduct);
-
-        // 5. Sobrescribimos el archivo JSON con los datos nuevos
-        fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), 'utf-8');
-
-        // 6. Redirigimos al usuario (al Home o al detalle del producto nuevo)
-        res.redirect('/');
+        } catch (error) {
+            console.error('Error al guardar el producto:', error);
+            return res.send('Ocurrió un error en la base de datos al crear el producto.');
+        }
     },
-    edit: (req, res) => {
-        const products = getProducts(); // <--- Agrega esto
-        const id = req.params.id;
-        const product = products.find(product => product.id == id);
-
-        res.render('products/productEdit', { product: product });
+    // 👇 ASYNC 👇
+    edit: async (req, res) => {
+        try {
+            // Buscamos el producto por su ID
+            const product = await db.Product.findByPk(req.params.id);
+            
+            if (product) {
+                return res.render('products/productEdit', { product });
+            } else {
+                return res.send('Producto no encontrado');
+            }
+        } catch (error) {
+            console.error('Error al cargar la edición:', error);
+            return res.send('Error de base de datos');
+        }
     },
     // NUEVO MÉTODO UPDATE
-    update: (req, res) => {
-        // 1. Leer todos los productos
-        const products = getProducts();
-        const id = req.params.id;
-
-        // 2. Buscar el índice del producto que queremos editar
-        const productIndex = products.findIndex(p => p.id == id);
-
-        if (productIndex >= 0) {
-             // 3. Modificar solo lo que llegó del formulario
-             // Mantenemos la imagen vieja si no subió una nueva
-             const oldProduct = products[productIndex];
-             
-             products[productIndex] = {
-                ...oldProduct, // Copia todo lo viejo primero
-                name: req.body.name,
-                price: Number(req.body.price),
-                category: req.body.category,
-                description: req.body.description,
-                // Si hay file nuevo usa ese, sino usa la imagen vieja
-                image: req.file ? req.file.filename : oldProduct.image
-             };
-
-             // 4. Guardar en JSON
-             fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2), 'utf-8');
+    // 👇 ASYNC 👇
+    update: async (req, res) => {
+        // 1. Validaciones
+        const resultValidation = validationResult(req);
+        if (resultValidation.errors.length > 0) {
+            if (req.file) { fs.unlinkSync(req.file.path); } // Borramos foto nueva si hay error
+            
+            // Necesitamos el producto viejo para volver a renderizar la vista correctamente
+            const productToEdit = await db.Product.findByPk(req.params.id);
+            
+            return res.render('products/productEdit', {
+                errors: resultValidation.mapped(),
+                oldData: req.body,
+                product: productToEdit
+            });
         }
 
-        // 5. Redirigir al detalle
-        res.redirect('/products/detail/' + id);
+        // --- ACTUALIZANDO EN POSTGRES ---
+        try {
+            // 2. Buscamos el producto viejo para saber qué imagen tenía
+            const productToUpdate = await db.Product.findByPk(req.params.id);
+
+            // 3. Actualizamos en la base de datos
+            await db.Product.update({
+                name: req.body.name,
+                price: req.body.price,
+                description: req.body.description,
+                category: req.body.category,
+                // Lógica mágica: ¿Subió foto nueva? Úsala. ¿No subió? Deja la vieja.
+                image: req.file ? req.file.filename : productToUpdate.image
+            }, {
+                where: { id: req.params.id } // Condición: actualiza solo este ID
+            });
+
+            // 4. Redirigimos al detalle del producto para ver los cambios
+            return res.redirect('/products/detail/' + req.params.id); // Ajusta esta ruta si en tu sistema es diferente
+
+        } catch (error) {
+            console.error('Error al actualizar:', error);
+            return res.send('Error en la base de datos');
+        }
     },
     destroy: (req, res) => {
         // 1. Leer el JSON
