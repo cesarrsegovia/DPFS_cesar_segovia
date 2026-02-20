@@ -118,10 +118,10 @@ const controller = {
 
         // --- ACTUALIZANDO EN POSTGRES ---
         try {
-            // 2. Buscamos el producto viejo para saber qué imagen tenía
+            // Buscamos el producto viejo para saber qué imagen tenía
             const productToUpdate = await db.Product.findByPk(req.params.id);
 
-            // 3. Actualizamos en la base de datos
+            //  Actualizamos en la base de datos
             await db.Product.update({
                 name: req.body.name,
                 price: req.body.price,
