@@ -133,7 +133,7 @@ const controller = {
                 where: { id: req.params.id } // Condición: actualiza solo este ID
             });
 
-            // 4. Redirigimos al detalle del producto para ver los cambios
+            // Redirigimos al detalle del producto para ver los cambios
             return res.redirect('/products/detail/' + req.params.id); // Ajusta esta ruta si en tu sistema es diferente
 
         } catch (error) {
@@ -142,7 +142,7 @@ const controller = {
         }
     },
     destroy: (req, res) => {
-        // 1. Leer el JSON
+        // Leer el JSON
         const products = getProducts();
         const id = req.params.id;
 
