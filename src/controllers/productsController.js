@@ -146,14 +146,14 @@ const controller = {
         const products = getProducts();
         const id = req.params.id;
 
-        // 2. Filtrar: Creamos una lista nueva SIN el producto que tiene ese ID
+        // Filtrar: Creamos una lista nueva SIN el producto que tiene ese ID
         // "Quiero todos los productos cuyo ID sea DISTINTO (!=) al que llegó"
         const finalProducts = products.filter(product => product.id != id);
 
-        // 3. Guardar la nueva lista en el JSON
+        // Guardar la nueva lista en el JSON
         fs.writeFileSync(productsFilePath, JSON.stringify(finalProducts, null, 2), 'utf-8');
 
-        // 4. Redirigir al Home (porque el detalle ya no existe)
+        // Redirigir al Home (porque el detalle ya no existe)
         res.redirect('/');
     }
 };
