@@ -141,20 +141,20 @@ const controller = {
             return res.send('Error en la base de datos');
         }
     },
-    destroy: (req, res) => {
-        // Leer el JSON
-        const products = getProducts();
-        const id = req.params.id;
+    destroy: async (req, res) => {
+        try {
+            // 1. Le decimos a Sequelize que DESTRUYA el producto que coincida con el ID de la URL
+            await db.Product.destroy({
+                where: { id: req.params.id }
+            });
 
-        // Filtrar: Creamos una lista nueva SIN el producto que tiene ese ID
-        // "Quiero todos los productos cuyo ID sea DISTINTO (!=) al que llegó"
-        const finalProducts = products.filter(product => product.id != id);
+            // 2. Redirigimos al Home (donde está nuestro listado actualizado)
+            return res.redirect('/');
 
-        // Guardar la nueva lista en el JSON
-        fs.writeFileSync(productsFilePath, JSON.stringify(finalProducts, null, 2), 'utf-8');
-
-        // Redirigir al Home (porque el detalle ya no existe)
-        res.redirect('/');
+        } catch (error) {
+            console.error('Error al borrar el producto:', error);
+            return res.send('Error en la base de datos al intentar eliminar el producto.');
+        }
     }
 };
 
