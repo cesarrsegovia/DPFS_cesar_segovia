@@ -14,15 +14,13 @@
             <section class="auth-box" style="max-width: 500px;">
                 <h2>Únete al equipo 🚀</h2>
 
-                <form action="/users/register" method="POST" class="auth-form">
+                <form action="/users/register" method="POST" class="auth-form" novalidate>
 
                     <div class="form-group">
                         <label for="name">Nombre Completo</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez" /* 1. PERSISTENCIA DE
-                                DATOS (Old Data) */ /* Si existe oldData.name, ponlo. Si no, pon vacío */
-                                value="<%= locals.oldData ? oldData.name : null %>">
+                            <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez" value="<%= locals.oldData ? oldData.name : null %>">
                         </div>
 
                         <% if (locals.errors && errors.name) { %>
@@ -51,7 +49,7 @@
                         <div class="input-wrapper">
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres"
-                            value="<%=locals.oldData ? oldData.password : null %>" required>
+                                value="<%=locals.oldData ? oldData.password : null %>" required>
                         </div>
                         <% if (locals.errors && errors.password) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
@@ -67,9 +65,9 @@
                             <input type="password" id="re-password" name="re-password"
                                 placeholder="Repite la contraseña" required>
                         </div>
-                        <% if (locals.errors && errors.re-password) { %>
+                        <% if (locals.errors && errors['re-password']) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
-                                <%= errors.re-password.msg %>
+                                <%= errors['re-password'].msg %>
                             </div>
                             <% } %>
                     </div>
@@ -89,7 +87,7 @@
                 </div>
             </section>
         </main>
-
+        <script src="/js/registerValidation.js"></script>
         <%- include('../partials/footer') %>
 
 </body>
