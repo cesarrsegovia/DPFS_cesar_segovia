@@ -1,45 +1,57 @@
 window.addEventListener('load', () => {
-    console.log("🕵️‍♂️ Script de validación de registro conectado y listo.");
+    console.log("🕵️‍♂️ Script de validación listo para inyectar errores.");
 
-    // 1. Atrapamos el formulario y TODOS los inputs
     const form = document.querySelector('.auth-form'); 
-    const inputName = document.querySelector('#name');
     
-    // 👇 NUEVOS INPUTS ATRAPADOS (Asegúrate de que tengan id="email" e id="password" en tu HTML)
+    // 1. Atrapamos los inputs
+    const inputName = document.querySelector('#name');
     const inputEmail = document.querySelector('#email'); 
     const inputPassword = document.querySelector('#password'); 
 
+    // 2. Atrapamos las cajitas vacías para los errores
+    const errorName = document.querySelector('#error-name');
+    const errorEmail = document.querySelector('#error-email');
+    const errorPassword = document.querySelector('#error-password');
+
     form.addEventListener('submit', (event) => {
-        let errores = []; 
+        let hayErrores = false; // Una bandera para saber si frenamos el formulario
+
+        // --- LIMPIEZA INICIAL ---
+        // Borramos los errores anteriores cada vez que el usuario vuelve a intentar
+        errorName.innerText = '';
+        errorEmail.innerText = '';
+        errorPassword.innerText = '';
 
         // --- VALIDACIÓN DEL NOMBRE ---
         if (inputName.value.trim() === '') {
-            errores.push("El nombre no puede estar vacío");
+            errorName.innerText = "El nombre no puede estar vacío"; // Escribimos en la cajita
+            hayErrores = true;
         } else if (inputName.value.length < 2) {
-            errores.push("El nombre debe tener al menos 2 caracteres");
+            errorName.innerText = "El nombre debe tener al menos 2 caracteres";
+            hayErrores = true;
         }
 
-        // 👇 --- VALIDACIÓN DEL CORREO --- 👇
+        // --- VALIDACIÓN DEL CORREO ---
         if (inputEmail.value.trim() === '') {
-            errores.push("El correo electrónico es obligatorio");
+            errorEmail.innerText = "El correo electrónico es obligatorio";
+            hayErrores = true;
         } else if (!inputEmail.value.includes('@') || !inputEmail.value.includes('.')) {
-            // Una validación sencillita para asegurar que parezca un correo
-            errores.push("Debes ingresar un formato de correo válido (ej: usuario@mail.com)");
+            errorEmail.innerText = "Debes ingresar un formato de correo válido";
+            hayErrores = true;
         }
 
-        // 👇 --- VALIDACIÓN DE LA CONTRASEÑA --- 👇
+        // --- VALIDACIÓN DE LA CONTRASEÑA ---
         if (inputPassword.value.trim() === '') {
-            errores.push("La contraseña no puede estar vacía");
+            errorPassword.innerText = "La contraseña no puede estar vacía";
+            hayErrores = true;
         } else if (inputPassword.value.length < 8) {
-            errores.push("La contraseña debe tener al menos 8 caracteres");
+            errorPassword.innerText = "La contraseña debe tener al menos 8 caracteres";
+            hayErrores = true;
         }
 
         // --- SI HAY ERRORES, FRENAMOS TODO ---
-        if (errores.length > 0) {
-            event.preventDefault(); 
-            
-            // Mostramos TODOS los errores juntos
-            alert("⚠️ CORRIGE ESTOS ERRORES:\n\n- " + errores.join('\n- '));
+        if (hayErrores) {
+            event.preventDefault(); // Frenamos el formulario, ¡pero ya no usamos alert()!
         }
     });
 });

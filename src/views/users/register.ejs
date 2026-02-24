@@ -22,7 +22,7 @@
                             <i class="fas fa-user"></i>
                             <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez" value="<%= locals.oldData ? oldData.name : null %>">
                         </div>
-
+                        <div id="error-name" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.name) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
                                 <%= errors.name.msg %>
@@ -37,6 +37,7 @@
                             <input type="email" id="email" name="email" placeholder="juan@ejemplo.com" required
                                 value="<%=locals.oldData ? oldData.email : null %>">
                         </div>
+                        <div id="error-email" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.email) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
                                 <%= errors.email.msg %>
@@ -50,7 +51,7 @@
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres"
                                 value="<%=locals.oldData ? oldData.password : null %>" required>
-                        </div>
+                        </div><div id="error-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.password) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
                                 <%= errors.password.msg %>
@@ -65,6 +66,7 @@
                             <input type="password" id="re-password" name="re-password"
                                 placeholder="Repite la contraseña" required>
                         </div>
+                        <div id="error-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors['re-password']) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
                                 <%= errors['re-password'].msg %>
