@@ -7,11 +7,13 @@ window.addEventListener('load', () => {
     const inputName = document.querySelector('#name');
     const inputEmail = document.querySelector('#email'); 
     const inputPassword = document.querySelector('#password'); 
+    const inputRePassword = document.querySelector('#re-password');
 
     // 2. Atrapamos las cajitas vacías para los errores
     const errorName = document.querySelector('#error-name');
     const errorEmail = document.querySelector('#error-email');
     const errorPassword = document.querySelector('#error-password');
+    const errorRePassword = document.querySelector('#error-re-password');
 
     form.addEventListener('submit', (event) => {
         let hayErrores = false; // Una bandera para saber si frenamos el formulario
@@ -21,6 +23,7 @@ window.addEventListener('load', () => {
         errorName.innerText = '';
         errorEmail.innerText = '';
         errorPassword.innerText = '';
+        errorRePassword.innerText = '';
 
         // --- VALIDACIÓN DEL NOMBRE ---
         if (inputName.value.trim() === '') {
@@ -46,6 +49,15 @@ window.addEventListener('load', () => {
             hayErrores = true;
         } else if (inputPassword.value.length < 8) {
             errorPassword.innerText = "La contraseña debe tener al menos 8 caracteres";
+            hayErrores = true;
+        }
+        // --- VALIDACIÓN DE CONFIRMAR CONTRASEÑA ---
+        if (inputRePassword.value.trim() === '') {
+            errorRePassword.innerText = "Debes confirmar tu contraseña";
+            hayErrores = true;
+        } else if (inputRePassword.value !== inputPassword.value) {
+            // ¡ESTA ES LA MAGIA! Comparamos los valores de ambos inputs
+            errorRePassword.innerText = "Las contraseñas no coinciden";
             hayErrores = true;
         }
 

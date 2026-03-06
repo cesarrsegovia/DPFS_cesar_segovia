@@ -20,7 +20,8 @@
                         <label for="name">Nombre Completo</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
-                            <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez" value="<%= locals.oldData ? oldData.name : null %>">
+                            <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez"
+                                value="<%= locals.oldData ? oldData.name : null %>">
                         </div>
                         <div id="error-name" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.name) { %>
@@ -51,7 +52,8 @@
                             <i class="fas fa-lock"></i>
                             <input type="password" id="password" name="password" placeholder="Mínimo 8 caracteres"
                                 value="<%=locals.oldData ? oldData.password : null %>" required>
-                        </div><div id="error-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+                        </div>
+                        <div id="error-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.password) { %>
                             <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
                                 <%= errors.password.msg %>
@@ -64,14 +66,10 @@
                         <div class="input-wrapper">
                             <i class="fas fa-check-circle"></i>
                             <input type="password" id="re-password" name="re-password"
-                                placeholder="Repite la contraseña" required>
+                                placeholder="Repite la contraseña">
                         </div>
-                        <div id="error-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
-                        <% if (locals.errors && errors['re-password']) { %>
-                            <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
-                                <%= errors['re-password'].msg %>
-                            </div>
-                            <% } %>
+
+                        <div id="error-re-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                     </div>
 
                     <div class="form-options">
