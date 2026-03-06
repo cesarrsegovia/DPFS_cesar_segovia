@@ -9,6 +9,7 @@ const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
 const mainRoutes = require('./routes/main');
 const productsRoutes = require('./routes/products');
 const usersRoutes = require('./routes/users');
+const apiUsersRouter = require('./routes/api/users');
 
 // 👇 IMPORTAMOS LA BASE DE DATOS 
 const db = require('../models');
@@ -77,6 +78,7 @@ app.get('/productCart', (req, res) => {
 app.use('/', mainRoutes);             // Rutas raíz (Home)
 app.use('/users', usersRoutes);       // Todas las rutas de usuarios empiezan con /users
 app.use('/products', productsRoutes); // Todas las rutas de productos empiezan con /products
+app.use('/api/users', apiUsersRouter);
 
 // Levantar el servidor
 const PORT = 3000;
