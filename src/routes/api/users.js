@@ -9,4 +9,4 @@ router.get('/', usersAPIController.list);
 // 👇 Detalle de un usuario: /api/users/1 👇
 router.get('/:id', usersAPIController.detail);
 
-module.exports = router;//asddas
+module.exports = router;//
