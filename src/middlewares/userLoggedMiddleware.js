@@ -8,18 +8,19 @@ async function userLoggedMiddleware(req, res, next) {
 
     // 2. LOGICA DE COOKIE (El Recordarme con Postgres)
     let emailInCookie = req.cookies.userEmail;
-    
+
     // Si hay cookie, buscamos en la Base de Datos
     if (emailInCookie) {
         try {
-            let userFromCookie = await db.User.findOne({ 
-                where: { email: emailInCookie } 
+            let userFromCookie = await db.User.findOne({
+                where: { email: emailInCookie }
             });
 
             if (userFromCookie) {
-                // Borramos el password por seguridad y lo metemos en sesión
-                delete userFromCookie.dataValues.password;
-                req.session.userLogged = userFromCookie.dataValues;
+                // Convertimos a objeto plano y borramos el password por seguridad
+                const userJSON = userFromCookie.toJSON();
+                delete userJSON.password;
+                req.session.userLogged = userJSON;
             }
         } catch (error) {
             console.error('Error buscando cookie en DB:', error);

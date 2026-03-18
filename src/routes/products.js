@@ -8,30 +8,6 @@ const productsController = require('../controllers/productsController');
 // 1. IMPORTAMOS AL NUEVO GUARDIA
 const adminMiddleware = require('../middlewares/adminMiddleware');
 
-// 2. DEFINIMOS LAS VALIDACIONES
-const validateCreateProduct = [
-    body('name').notEmpty().withMessage('El nombre es obligatorio'),
-    body('price').notEmpty().withMessage('El precio es obligatorio'),
-    
-    // 🔥 NUEVO: VALIDACIÓN PERSONALIZADA PARA LA IMAGEN
-    body('image').custom((value, { req }) => {
-        let file = req.file; // Multer ya procesó la imagen y la puso aquí
-        let acceptedExtensions = ['.jpg', '.png', '.gif', '.jpeg'];
-
-        if (!file) {
-            throw new Error('Tienes que subir una imagen'); // Error si no hay archivo
-        } else {
-            // (Opcional) Validar extensión
-            let fileExtension = path.extname(file.originalname);
-            if (!acceptedExtensions.includes(fileExtension)) {
-                throw new Error(`Las extensiones permitidas son ${acceptedExtensions.join(', ')}`);
-            }
-        }
-
-        return true; // Si pasa todo, devolvemos true
-    })
-];
-
 // --- CONFIGURACIÓN DE MULTER (Carga de archivos) ---
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -47,6 +23,27 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+// 2. DEFINIMOS LAS VALIDACIONES (después de multer para acceder a req.file)
+const validateCreateProduct = [
+    body('name').notEmpty().withMessage('El nombre es obligatorio'),
+    body('price').notEmpty().withMessage('El precio es obligatorio'),
+    body('image').custom((value, { req }) => {
+        let file = req.file;
+        let acceptedExtensions = ['.jpg', '.png', '.gif', '.jpeg'];
+
+        if (!file) {
+            throw new Error('Tienes que subir una imagen');
+        } else {
+            let fileExtension = path.extname(file.originalname);
+            if (!acceptedExtensions.includes(fileExtension)) {
+                throw new Error(`Las extensiones permitidas son ${acceptedExtensions.join(', ')}`);
+            }
+        }
+
+        return true;
+    })
+];
 
 // --- RUTAS ---
 

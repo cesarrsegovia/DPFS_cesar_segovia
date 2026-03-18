@@ -1,25 +1,18 @@
 // src/controllers/productsController.js
-const { validationResult } = require('express-validator');
 const fs = require('fs');
-const path = require('path');
+const { validationResult } = require('express-validator');
 const db = require('../../models'); // Importamos la base de datos
 
-// 1. Leemos el JSON de productos (igual que hiciste en mainController)
-const productsFilePath = path.join(__dirname, '../data/products.json');
-// Helper para leer el JSON (reutilizable)
-const getProducts = () => {
-    // Si el archivo está vacío o da error, devolvemos un array vacío para que no rompa
-    if (!fs.existsSync(productsFilePath)) return [];
-    const fileContent = fs.readFileSync(productsFilePath, 'utf-8');
-    // Si el archivo está vacío, devolvemos array vacío
-    return fileContent ? JSON.parse(fileContent) : [];
-};
-
 const controller = {
-    // Listado de productos (el Home muestra destacados, pero quizás quieras una lista completa luego)
-    index: (req, res) => {
-        // Como los productos se ven en el Home, redirigimos hacia allá
-        return res.redirect('/');
+    // Listado de productos
+    index: async (req, res) => {
+        try {
+            const products = await db.Product.findAll();
+            return res.render('products/productList', { products });
+        } catch (error) {
+            console.error('Error al listar productos:', error);
+            return res.send('Error al cargar la base de datos');
+        }
     },
     // 👇 NO OLVIDES EL ASYNC 👇
     detail: async (req, res) => {

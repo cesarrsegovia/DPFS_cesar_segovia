@@ -1,18 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const bcrypt = require('bcryptjs'); // Importamos la librería de seguridad
 const { validationResult } = require('express-validator');
 const db = require('../../models'); // Importamos toda la base de datos
-
-// Ruta al JSON de usuarios
-const usersFilePath = path.join(__dirname, '../data/users.json');
-
-// Función ayudante para leer los usuarios
-const getUsers = () => {
-    if (!fs.existsSync(usersFilePath)) return [];
-    const fileContent = fs.readFileSync(usersFilePath, 'utf-8');
-    return fileContent ? JSON.parse(fileContent) : [];
-};
 
 const controller = {
     // 1. Mostrar formulario de Login
@@ -91,14 +79,14 @@ const controller = {
             // Si el usuario existe, verificamos la contraseña
             if (userToLogin) {
                 const isOkThePassword = bcrypt.compareSync(req.body.password, userToLogin.password);
-                
+
                 if (isOkThePassword) {
-                    // ¡Todo correcto! Borramos el password por seguridad antes de guardar en sesión
-                    // (En Sequelize, los datos reales vienen dentro de .dataValues)
-                    delete userToLogin.dataValues.password;
-                    
+                    // ¡Todo correcto! Convertimos a objeto plano y borramos el password por seguridad
+                    const userJSON = userToLogin.toJSON();
+                    delete userJSON.password;
+
                     // Guardamos al usuario en la sesión
-                    req.session.userLogged = userToLogin.dataValues;
+                    req.session.userLogged = userJSON;
 
                     // Lógica de "Recordarme" (Cookie)
                     if (req.body.remember_user) {
@@ -106,7 +94,7 @@ const controller = {
                     }
 
                     // Redirigimos al inicio (o al perfil)
-                    return res.redirect('/'); 
+                    return res.redirect('/');
                 }
 
                 // Si la contraseña está mal

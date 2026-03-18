@@ -4,6 +4,8 @@
   "description": "DevStyle - E-commerce para Desarrolladores\r Descripción del Proyecto\r DevStyle es un mercado en línea diseñado específicamente para profesionales y estudiantes del mundo de la tecnología. Ofrecemos una selección curada de productos que mejoran el espacio de trabajo (setup), aumentan la productividad y permiten a los desarrolladores expresar su pasión por el código a través de su vestimenta y accesorios.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +23,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.5",
     "ejs": "^4.0.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
@@ -32,6 +35,7 @@
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "nodemon": "^3.1.0",
     "sequelize-cli": "^6.6.5"
   }
 }
