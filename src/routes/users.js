@@ -33,4 +33,4 @@ router.post('/login', guestMiddleware, loginValidations, usersController.process
 router.post('/register', guestMiddleware, registerValidations, usersController.processRegister);
 router.get('/logout', usersController.logout);
 
-module.exports = router;//adsasdadsdsa
+module.exports = router;//adsasd
