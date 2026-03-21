@@ -6,6 +6,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const userLoggedMiddleware = require('./middlewares/userLoggedMiddleware');
+const port = process.env.PORT || 3000;
 
 // SISTEMAS DE RUTAS
 const mainRoutes = require('./routes/main');
@@ -61,5 +62,9 @@ app.use('/users', usersRoutes);       // Todas las rutas de usuarios empiezan co
 app.use('/products', productsRoutes); // Todas las rutas de productos empiezan con /products
 app.use('/api/users', apiUsersRouter);
 app.use('/api/products', apiProductsRouter);
+
+app.listen(port, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
+});
 
 module.exports = app;

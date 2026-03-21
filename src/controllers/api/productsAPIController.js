@@ -1,4 +1,4 @@
-const db = require('../../models');
+const db = require('../../../models');
 
 const productsAPIController = {
     // 1. LISTADO DE PRODUCTOS
