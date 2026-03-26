@@ -24,7 +24,7 @@ function ProductList(props) {
 
             </ul>
         </div>
-    );//asdasddsa
+    );//
 }
 
 export default ProductList;
