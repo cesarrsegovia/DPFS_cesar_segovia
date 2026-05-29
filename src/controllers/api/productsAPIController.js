@@ -6,13 +6,29 @@ const productsAPIController = {
         try {
             const products = await db.Product.findAll();
 
+            // Calculamos countByCategory dinámicamente
+            const countByCategory = {};
+            products.forEach(product => {
+                const category = product.category || 'otros';
+                countByCategory[category] = (countByCategory[category] || 0) + 1;
+            });
+
+            // Mapeamos los productos con la estructura especificada
+            const productsMapped = products.map(product => {
+                return {
+                    id: product.id,
+                    name: product.name,
+                    description: product.description,
+                    // Array de una relación de uno a muchos (categorías)
+                    categories: [{ name: product.category }],
+                    detail: `http://localhost:3000/api/products/${product.id}`
+                };
+            });
+
             return res.json({
-                meta: {
-                    status: 200,
-                    count: products.length,
-                    url: '/api/products'
-                },
-                data: products
+                count: products.length,
+                countByCategory: countByCategory,
+                products: productsMapped
             });
         } catch (error) {
             console.error('Error en API de productos (list):', error);
@@ -26,16 +42,19 @@ const productsAPIController = {
             const product = await db.Product.findByPk(req.params.id);
 
             if (product) {
-                return res.json({
-                    meta: {
-                        status: 200,
-                        url: `/api/products/${req.params.id}`
-                    },
-                    data: product
-                });
+                const productJSON = product.toJSON();
+
+                // Añadimos arrays para cada relación de uno a muchos
+                productJSON.categories = [{ name: product.category }];
+                productJSON.colors = []; // Mapeamos vacío si no hay en base de datos
+                productJSON.sizes = [];  // Mapeamos vacío si no hay en base de datos
+
+                // Inyectamos la URL de la imagen del producto
+                productJSON.imageUrl = `http://localhost:3000/img/${productJSON.image || 'default-image.png'}`;
+
+                return res.json(productJSON);
             } else {
                 return res.status(404).json({
-                    meta: { status: 404 },
                     error: 'Producto no encontrado'
                 });
             }

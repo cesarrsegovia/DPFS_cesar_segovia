@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "dashboard/*",
+    "dashboard/**",
+    "public/img/*",
+    "public/img/**",
+    "*.sql"
+  ]
+}

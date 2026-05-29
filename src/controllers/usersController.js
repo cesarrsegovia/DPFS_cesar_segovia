@@ -19,6 +19,13 @@ const controller = {
         // 1. Validación de express-validator (ESTO QUEDA IGUAL)
         const resultValidation = validationResult(req);
         if (resultValidation.errors.length > 0) {
+            // Si subió un archivo y hay errores, lo borramos
+            if (req.file) {
+                const fs = require('fs');
+                if (fs.existsSync(req.file.path)) {
+                    fs.unlinkSync(req.file.path);
+                }
+            }
             return res.render('users/register', {
                 errors: resultValidation.mapped(),
                 oldData: req.body
@@ -33,6 +40,13 @@ const controller = {
             });
 
             if (userExists) {
+                // Borramos el avatar si hay error de duplicación
+                if (req.file) {
+                    const fs = require('fs');
+                    if (fs.existsSync(req.file.path)) {
+                        fs.unlinkSync(req.file.path);
+                    }
+                }
                 return res.render('users/register', {
                     errors: { email: { msg: 'Este correo ya está registrado' } },
                     oldData: req.body
@@ -44,7 +58,8 @@ const controller = {
                 name: req.body.name,
                 email: req.body.email,
                 password: bcrypt.hashSync(req.body.password, 10),
-                rol: 'user'
+                rol: 'user',
+                image: req.file ? req.file.filename : 'default-avatar.png'
             });
 
             // 4. Redirigimos al login
@@ -93,8 +108,8 @@ const controller = {
                         res.cookie('userEmail', req.body.email, { maxAge: 1000 * 60 * 60 });
                     }
 
-                    // Redirigimos al inicio (o al perfil)
-                    return res.redirect('/');
+                    // Redirigimos al perfil
+                    return res.redirect('/users/profile');
                 }
 
                 // Si la contraseña está mal
@@ -114,6 +129,12 @@ const controller = {
             console.error('Error en el login:', error);
             return res.send('Ocurrió un error en la base de datos.');
         }
+    },
+    // --- PERFIL DE USUARIO ---
+    profile: (req, res) => {
+        return res.render('users/profile', {
+            user: req.session.userLogged
+        });
     },
     // --- CERRAR SESIÓN ---
     logout: (req, res) => {

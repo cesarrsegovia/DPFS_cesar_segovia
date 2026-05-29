@@ -6,7 +6,7 @@
     </div>
 
     <form class="search-bar" action="/" method="GET">
-        <input type="text" placeholder="Buscar productos...">
+        <input type="text" name="search" placeholder="Buscar productos...">
         <button type="submit"><i class="fas fa-search"></i></button>
     </form>
 
@@ -14,9 +14,9 @@
         <div class="user-actions">
 
             <% if (locals.isLogged) { %>
-                <span style="color: var(--accent); margin-right: 15px; font-weight: bold;">
+                <a href="/users/profile" style="color: var(--accent); margin-right: 15px; font-weight: bold; text-decoration: none;" class="profile-greeting">
                     ¡Hola, <%= locals.userLogged.name %>! 👋
-                </span>
+                </a>
                 <a href="/users/logout" class="btn-login" style="background-color: #ff4757;"><i
                         class="fas fa-sign-out-alt"></i> Salir</a>
 
@@ -25,7 +25,10 @@
                     <a href="/users/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
                     <% } %>
 
-                        <a href="/products/cart" class="btn-cart"><i class="fas fa-shopping-cart"></i></a>
+                        <a href="/products/cart" class="btn-cart" style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span id="cart-badge" style="position: absolute; top: -10px; right: -10px; background-color: var(--accent); color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 0.65rem; font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.5);">0</span>
+                        </a>
         </div>
     </nav>
 </header>

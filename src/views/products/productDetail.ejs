@@ -50,6 +50,10 @@
                     </p>
 
                     <form action="/products/cart" method="GET" class="buy-form">
+                        <input type="hidden" id="prod-id" value="<%= product.id %>">
+                        <input type="hidden" id="prod-name" value="<%= product.name %>">
+                        <input type="hidden" id="prod-price" value="<%= product.price %>">
+                        <input type="hidden" id="prod-image" value="<%= product.image %>">
                         <div class="selectors">
                             <div class="selector-group">
                                 <label>Color:</label>

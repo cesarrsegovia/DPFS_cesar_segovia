@@ -12,6 +12,7 @@ module.exports = {
         email: 'admin@devstyle.com',
         password: hashedPassword,
         rol: 'admin',
+        image: 'admin.png',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -20,6 +21,7 @@ module.exports = {
         email: 'user@devstyle.com',
         password: hashedPassword,
         rol: 'user',
+        image: 'user.png',
         createdAt: new Date(),
         updatedAt: new Date()
       }

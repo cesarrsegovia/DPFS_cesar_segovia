@@ -28,6 +28,7 @@ db.sequelize.authenticate()
     });
 
 const app = express();
+app.locals.dashboardUrl = process.env.DASHBOARD_URL || 'http://localhost:3001';
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.json());
 app.use(cors());
@@ -62,9 +63,5 @@ app.use('/users', usersRoutes);       // Todas las rutas de usuarios empiezan co
 app.use('/products', productsRoutes); // Todas las rutas de productos empiezan con /products
 app.use('/api/users', apiUsersRouter);
 app.use('/api/products', apiProductsRouter);
-
-app.listen(port, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
-});
 
 module.exports = app;

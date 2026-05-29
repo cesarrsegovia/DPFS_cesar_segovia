@@ -13,31 +13,48 @@
             <section class="auth-box" style="max-width: 800px;">
                 <h2>Editar Producto 📦</h2>
 
-                <form action="/products/<%= product.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                <form action="/products/<%= product.id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="product-form" novalidate>
 
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                         <div class="form-group" style="flex: 2;">
                             <label for="name">Nombre del Producto</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-tag"></i>
-                                <input type="text" id="name" name="name" value="<%= product.name %>" required>
+                                <input type="text" id="name" name="name" value="<%= locals.oldData ? oldData.name : product.name %>" required>
                             </div>
+                            <div id="error-name" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+                            <% if (locals.errors && errors.name) { %>
+                                <div class="text-danger" style="color: red; font-size: 0.8rem; margin-top: 5px;">
+                                    <%= errors.name.msg %>
+                                </div>
+                            <% } %>
                         </div>
 
                         <div class="form-group" style="flex: 1;">
                             <label for="price">Precio</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-dollar-sign"></i>
-                                <input type="number" id="price" name="price" value="<%= product.price %>" step="0.01"
-                                    required>
+                                <input type="number" id="price" name="price" value="<%= locals.oldData ? oldData.price : product.price %>" step="0.01" required>
                             </div>
+                            <div id="error-price" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+                            <% if (locals.errors && errors.price) { %>
+                                <div class="text-danger" style="color: red; font-size: 0.8rem; margin-top: 5px;">
+                                    <%= errors.price.msg %>
+                                </div>
+                            <% } %>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="description">Descripción</label>
                         <textarea name="description" id="description" rows="4"
-                            style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"><%= product.description %></textarea>
+                            style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"><%= locals.oldData ? oldData.description : product.description %></textarea>
+                        <div id="error-description" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+                        <% if (locals.errors && errors.description) { %>
+                            <div class="text-danger" style="color: red; font-size: 0.8rem; margin-top: 5px;">
+                                <%= errors.description.msg %>
+                            </div>
+                        <% } %>
                     </div>
 
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -45,14 +62,15 @@
                             <label for="category">Categoría</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-list"></i>
+                                <% const selectedCat = locals.oldData ? oldData.category : product.category %>
                                 <select name="category" id="category"
                                     style="width: 100%; background: transparent; border: none; color: white; outline: none;">
-                                    <option value="perifericos" <%=product.category=='perifericos' ? 'selected' : '' %>
+                                    <option value="perifericos" <%= selectedCat =='perifericos' ? 'selected' : '' %>
                                         >Periféricos</option>
-                                    <option value="ropa" <%=product.category=='ropa' ? 'selected' : '' %>>Ropa</option>
-                                    <option value="libros" <%=product.category=='libros' ? 'selected' : '' %>>Libros
+                                    <option value="ropa" <%= selectedCat =='ropa' ? 'selected' : '' %>>Ropa</option>
+                                    <option value="libros" <%= selectedCat =='libros' ? 'selected' : '' %>>Libros
                                     </option>
-                                    <option value="accesorios" <%=product.category=='accesorios' ? 'selected' : '' %>
+                                    <option value="accesorios" <%= selectedCat =='accesorios' ? 'selected' : '' %>
                                         >Accesorios</option>
                                 </select>
                             </div>
@@ -60,12 +78,18 @@
 
                         <div class="form-group" style="flex: 1;">
                             <label>Imagen Actual: <span style="color:var(--accent);">
-                                    <%= product.image %>
+                                     <%= product.image %>
                                 </span></label>
                             <div class="input-wrapper">
                                 <i class="fas fa-camera"></i>
                                 <input type="file" id="image" name="image" accept="image/*">
                             </div>
+                            <div id="error-image" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
+                            <% if (locals.errors && errors.image) { %>
+                                <div class="text-danger" style="color: red; font-size: 0.8rem; margin-top: 5px;">
+                                    <%= errors.image.msg %>
+                                </div>
+                            <% } %>
                         </div>
                     </div>
 
@@ -76,6 +100,7 @@
             </section>
         </main>
 
+        <script src="/js/productValidation.js"></script>
         <%- include('../partials/footer') %>
 
 </body>

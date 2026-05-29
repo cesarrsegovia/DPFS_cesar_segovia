@@ -103,3 +103,49 @@
 
 ## Pensar a futuro
 - Pensar en "Piezas de Lego" desde el principio. Antes de escribir código JSX gigante, planear qué partes de la interfaz pueden separarse en componentes pequeños.
+
+---
+
+#  Auditoría de Sprints y Plan de Acción Pre-Entrega
+
+A continuación, se detalla el estado de cumplimiento por Sprint y los detalles técnicos después de la optimización y completitud técnica para lograr una entrega 100% conforme a los requisitos del cliente DH Venture Capitals:
+
+###  Sprint 1 & 2: Planificación y Diseño
+- [x] **Repositorio y Colaboradores:** Creado correctamente (`DPFS_cesar_segovia`).
+- [x] **README.md:** Se agregó la descripción personal de César Segovia, el listado detallado de los 5 referentes con enlaces y justificaciones, y el link de Trello para el seguimiento.
+- [x] **Vistas Maquetadas:** Home, detalle, carrito, registro y login completamente maquetadas (EJS/CSS).
+
+###  Sprint 3 & 4: EJS y CRUD
+- [x] **Motor de Plantillas:** EJS y parciales (`head.ejs`, `header.ejs`, `footer.ejs`) implementados.
+- [x] **Estructura MVC:** Rutas, controladores y vistas correctamente separados.
+- [x] **CRUD Completo:** Formulario de creación, edición, borrado, listado y detalle funcionando en base de datos.
+- [x] **Migración a BD:** Se superó el almacenamiento en archivos JSON (sprint 4) migrando directamente a PostgreSQL con Sequelize (sprint 6).
+
+###  Sprint 5: Sesiones, Cookies y Middleware
+- [x] **Login y Registro:** Flujo de registro y login implementado con encriptación bcryptjs.
+- [x] **Recordarme:** Cookies para persistir el login del usuario implementadas.
+- [x] **Middlewares de Ruta:** `guestMiddleware` y `adminMiddleware` implementados.
+- [x] **Mejoras Realizadas:** El modelo de usuario incluye ahora la subida de imagen de perfil (Multer), la columna `image` en base de datos, y se añadió una vista y ruta de perfil de usuario (`/users/profile`) protegida con `authMiddleware`.
+
+###  Sprint 6: Base de Datos y Sequelize
+- [x] **Modelos y Migraciones:** Configuración de Sequelize, modelos `User` y `Product` con sus relaciones, migraciones y seeders creados.
+- [x] **Entregables de Base de Datos:** Se crearon los scripts `structure.sql` (creación de base de datos y tablas) y `data.sql` (poblado de datos semilla) para su entrega inmediata.
+
+###  Sprint 7: Validaciones (Front-end y Back-end)
+- [x] **Validaciones del Back-end (Express Validator):** 
+  - Se añadieron validaciones de registro robustas (longitud de nombre >= 2, password >= 8, y validación de extensiones de imagen de avatar).
+  - Se añadieron validaciones de productos (nombre >= 5, descripción >= 20, y validación de extensiones de imagen).
+  - La ruta de edición (`PUT`) ejecuta ahora de forma segura el middleware de validación `validateEditProduct` (con imagen opcional).
+- [x] **Validaciones del Front-end (JavaScript):**
+  - Validación de registro implementada correctamente (`registerValidation.js`).
+  - Se implementó la validación interactiva del lado del cliente para Login (`loginValidation.js`) y Creación/Edición de productos (`productValidation.js`) enlazadas dinámicamente en los formularios correspondientes.
+
+###  Sprint 8: APIs y React Dashboard
+- [x] **Endpoints de la API:**
+  - `api/users`: Retorna `{ count, users }` plano, donde cada usuario incluye la propiedad `detail` apuntando a su recurso individual.
+  - `api/users/:id`: Retorna la información sin contraseña y agregando la propiedad `avatar` con la URL absoluta.
+  - `api/products`: Retorna `{ count, countByCategory, products }` plano, donde cada producto incluye categorías asociadas y su enlace `detail`.
+  - `api/products/:id`: Retorna la información con las relaciones asociadas y su propiedad `imageUrl` con ruta absoluta.
+- [x] **React Dashboard:**
+  - El dashboard consume con éxito la API plana y actualiza las métricas y listados en tiempo real.
+  - Se añadió con éxito el **Panel de Categorías** (`CategoryPanel.js`) que renderiza una grilla con el desglose exacto de productos asignados a cada categoría.

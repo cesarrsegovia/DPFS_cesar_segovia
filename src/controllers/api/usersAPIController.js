@@ -4,25 +4,29 @@ const usersAPIController = {
     // Método para listar todos los usuarios
     list: async (req, res) => {
         try {
-            // Buscamos todos los usuarios, PERO le decimos a Sequelize que SOLO traiga id, nombre y email.
+            // Buscamos todos los usuarios
             const users = await db.User.findAll({
                 attributes: ['id', 'name', 'email'] 
             });
 
-            // En lugar de res.render(), usamos res.json() para devolver datos crudos
+            // Creamos la lista mapeada con la URL de detalle
+            const usersMapped = users.map(user => {
+                return {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    detail: `http://localhost:3000/api/users/${user.id}`
+                };
+            });
+
             return res.json({
-                meta: {
-                    status: 200,
-                    count: users.length,
-                    url: '/api/users'
-                },
-                data: users
+                count: users.length,
+                users: usersMapped
             });
 
         } catch (error) {
             console.error('Error en la API de usuarios:', error);
             return res.status(500).json({ 
-                meta: { status: 500 },
                 error: 'Hubo un error al conectar con la base de datos' 
             });
         }
@@ -30,25 +34,23 @@ const usersAPIController = {
     // 👇 2. EL DETALLE 
     detail: async (req, res) => {
         try {
-            // Buscamos al usuario por su ID (el que viene en la URL)
+            // Buscamos al usuario por su ID
             const user = await db.User.findByPk(req.params.id, {
-                // Le decimos a Postgres: "Tráeme todo EXCEPTO el password y el rol" (Por seguridad)
-                attributes: { exclude: ['password', 'rol'] }
+                // Excluimos password (por seguridad)
+                attributes: { exclude: ['password'] }
             });
 
-            // Si el usuario existe, lo enviamos en JSON
             if (user) {
-                return res.json({
-                    meta: {
-                        status: 200,
-                        url: `/api/users/${req.params.id}`
-                    },
-                    data: user
-                });
+                const userJSON = user.toJSON();
+                // Retornamos todas las propiedades e inyectamos la URL de su imagen de perfil
+                userJSON.avatar = `http://localhost:3000/img/users/${userJSON.image || 'default-avatar.png'}`;
+                
+                // Excluimos explícitamente rol por requerimiento si no es parte de la info expuesta
+                delete userJSON.rol;
+
+                return res.json(userJSON);
             } else {
-                // Si ponen un ID que no existe (ej: /api/users/999)
                 return res.status(404).json({
-                    meta: { status: 404 },
                     error: 'Usuario no encontrado'
                 });
             }

@@ -14,7 +14,7 @@
             <section class="auth-box" style="max-width: 500px;">
                 <h2>Únete al equipo 🚀</h2>
 
-                <form action="/users/register" method="POST" class="auth-form" novalidate>
+                <form action="/users/register" method="POST" class="auth-form" enctype="multipart/form-data" novalidate>
 
                     <div class="form-group">
                         <label for="name">Nombre Completo</label>
@@ -72,6 +72,18 @@
                         <div id="error-re-password" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="avatar">Foto de Perfil</label>
+                        <div class="input-wrapper" style="border: 1px solid var(--text-gray); border-radius: 5px; background: #2c2c2c;">
+                            <input type="file" id="avatar" name="avatar" class="form-input" style="padding: 10px; color: white;">
+                        </div>
+                        <% if (locals.errors && errors.avatar) { %>
+                            <div style="color: red; font-size: 0.8rem; margin-top: 5px;">
+                                <%= errors.avatar.msg %>
+                            </div>
+                            <% } %>
+                    </div>
+
                     <div class="form-options">
                         <label class="checkbox-label">
                             <input type="checkbox" required> Acepto los <a href="#"
@@ -83,7 +95,7 @@
                 </form>
 
                 <div class="auth-footer">
-                    <p>¿Ya tienes cuenta? <a href="login.html">Inicia Sesión</a></p>
+                    <p>¿Ya tienes cuenta? <a href="/users/login">Inicia Sesión</a></p>
                 </div>
             </section>
         </main>

@@ -2,27 +2,23 @@
 <html lang="es">
 
 <head>
-    <%- include('./partials/head') %>
+    <%- include('../partials/head') %>
 </head>
 
 <body>
 
-    <%- include('./partials/header') %>
+    <%- include('../partials/header') %>
 
         <main>
-            <section class="banner">
-                <h1>Upgrade Your Setup</h1>
-            </section>
-
-            <section class="products-section">
-                <h2>Ofertas Destacadas</h2>
+            <section class="products-section" style="min-height: 70vh; padding: 40px 5%;">
+                <h2 style="margin-bottom: 30px; border-left: 5px solid var(--accent); padding-left: 10px;">Todos los Productos</h2>
 
                 <% if (products.length === 0) { %>
                     <div class="no-results" style="text-align: center; padding: 60px 20px; width: 100%; background: var(--bg-card); border-radius: 10px; border: 1px dashed #444;">
                         <i class="fas fa-search" style="font-size: 3.5rem; color: var(--accent); margin-bottom: 20px; display: block;"></i>
-                        <h3 style="color: white; margin-bottom: 10px; font-size: 1.5rem;">No encontramos coincidencias</h3>
-                        <p style="color: var(--text-gray); margin-bottom: 25px; font-size: 1.05rem;">Prueba con otros términos de búsqueda o explora nuestro catálogo completo.</p>
-                        <a href="/" class="btn-primary" style="display: inline-block; width: auto; padding: 12px 30px; font-size: 0.95rem; text-decoration: none;">Ver todos los productos</a>
+                        <h3 style="color: white; margin-bottom: 10px; font-size: 1.5rem;">No hay productos cargados</h3>
+                        <p style="color: var(--text-gray); margin-bottom: 25px; font-size: 1.05rem;">Actualmente no hay productos registrados en el catálogo.</p>
+                        <a href="/" class="btn-primary" style="display: inline-block; width: auto; padding: 12px 30px; font-size: 0.95rem; text-decoration: none;">Volver al Home</a>
                     </div>
                 <% } else { %>
                     <div class="product-grid">
@@ -50,7 +46,7 @@
             </section>
         </main>
 
-        <%- include('./partials/footer') %>
+        <%- include('../partials/footer') %>
 
 </body>
 

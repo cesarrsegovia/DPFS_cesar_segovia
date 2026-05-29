@@ -13,7 +13,7 @@
             <section class="auth-box" style="max-width: 800px;">
                 <h2>Crear Nuevo Producto 📦</h2>
 
-                <form action="/products" method="POST" enctype="multipart/form-data">
+                <form action="/products" method="POST" enctype="multipart/form-data" class="product-form" novalidate>
 
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                         <div class="form-group">
@@ -23,6 +23,7 @@
                                 <input type="text" id="name" name="name" class="form-input"
                                     value="<%= locals.oldData ? oldData.name : null %>">
                             </div>
+                            <div id="error-name" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                             <% if (locals.errors && errors.name) { %>
                                 <div class="text-danger">
                                     <%= errors.name.msg %>
@@ -38,7 +39,7 @@
                                     PERSISTENCIA: Si hay dato viejo, ponlo */
                                     value="<%= locals.oldData ? oldData.price : null %>" class="form-input">
                             </div>
-
+                            <div id="error-price" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                             <% if (locals.errors && errors.price) { %>
                                 <div class="text-danger">
                                     <%= errors.price.msg %>
@@ -51,7 +52,12 @@
                         <label for="description">Descripción</label>
                         <textarea name="description" id="description" rows="4"
                             style="width: 100%; padding: 10px; background: #2c2c2c; border: none; color: white; border-radius: 5px;"
-                            placeholder="Escribe los detalles del producto..."></textarea>
+                            placeholder="Escribe los detalles del producto..."><%= locals.oldData ? oldData.description : '' %></textarea>
+                        <% if (locals.errors && errors.description) { %>
+                            <div class="text-danger">
+                                <%= errors.description.msg %>
+                            </div>
+                        <% } %>
                     </div>
 
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -77,7 +83,7 @@
                     <div class="form-group">
                         <label for="image">Imagen del Producto</label>
                         <input type="file" id="image" name="image" class="form-input">
-
+                        <div id="error-image" style="color: red; font-size: 0.8rem; margin-top: 5px;"></div>
                         <% if (locals.errors && errors.image) { %>
                             <div class="text-danger">
                                 <%= errors.image.msg %>
@@ -96,6 +102,7 @@
             </section>
         </main>
 
+        <script src="/js/productValidation.js"></script>
         <%- include('../partials/footer') %>
 
 </body>

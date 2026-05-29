@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('../partials/head') %>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="auth-container">
+            <section class="auth-box" style="max-width: 550px; text-align: center; padding: 40px;">
+                <h2 style="color: var(--accent); margin-bottom: 30px;">Tu Perfil 👤</h2>
+
+                <div style="text-align: left; margin-bottom: 35px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;">
+                    <p style="margin: 10px 0; font-size: 1.1rem; color: #fff;">
+                        <strong>Nombre Completo:</strong> <span style="color: #ccc;"><%= user.name %></span>
+                    </p>
+                    <p style="margin: 10px 0; font-size: 1.1rem; color: #fff;">
+                        <strong>Correo Electrónico:</strong> <span style="color: #ccc;"><%= user.email %></span>
+                    </p>
+                    <p style="margin: 10px 0; font-size: 1.1rem; color: #fff;">
+                        <strong>Rol en el Sitio:</strong> <span style="text-transform: uppercase; color: var(--accent); font-weight: bold;"><%= user.rol %></span>
+                    </p>
+                </div>
+
+                    <% if (user.rol === 'admin') { %>
+                        <a href="/products/create" class="btn-primary" style="background: var(--accent); border-color: var(--accent); display: block; text-decoration: none; padding: 12px; border-radius: 5px; font-weight: bold; color: black;">
+                            ➕ CREAR NUEVO PRODUCTO
+                        </a>
+                        <a href="<%= dashboardUrl %>" target="_blank" class="btn-primary" style="background: #4caf50; border-color: #4caf50; display: block; text-decoration: none; padding: 12px; border-radius: 5px; font-weight: bold; color: white;">
+                            💻 PANEL DASHBOARD DE REACT
+                        </a>
+                    <% } %>
+
+                    <a href="/" class="btn-primary" style="display: block; text-decoration: none; padding: 12px; border-radius: 5px; font-weight: bold; color: white;">
+                        IR A LA TIENDA
+                    </a>
+
+                    <a href="/users/logout" style="display: block; color: #ff5252; text-decoration: none; font-weight: bold; padding: 10px; border: 1px solid #ff5252; border-radius: 5px; margin-top: 10px;">
+                        CERRAR SESIÓN
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

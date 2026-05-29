@@ -3,64 +3,59 @@ import './App.css';
 import MetricCard from './components/MetricCard';
 import LastProduct from './components/LastProduct';
 import ProductList from './components/ProductList';
+import CategoryPanel from './components/CategoryPanel';
 
 function App() {
   // 1. Nuestras cajas (Estados)
   const [usersCount, setUsersCount] = useState("Cargando...");
   const [productsCount, setProductsCount] = useState("Cargando...");
-  
-  // 👇 NUEVO: Caja para guardar todo el objeto del último producto
   const [lastProduct, setLastProduct] = useState(null); 
   const [productsList, setProductsList] = useState([]);
+  const [categoriesCount, setCategoriesCount] = useState({});
 
   // 2. useEffect: Buscamos los datos al cargar la página
   useEffect(() => {
     
-    // Fetch de Usuarios (Queda igual)
+    // Fetch de Usuarios (Directo, sin meta)
     fetch('http://localhost:3000/api/users')
       .then(respuesta => respuesta.json())
-      .then(datos => setUsersCount(datos.meta.count))
+      .then(datos => setUsersCount(datos.count))
       .catch(error => console.error("Error usuarios:", error));
 
-    // 👇 Fetch de Productos (Actualizado)
+    // Fetch de Productos (Directo, sin meta)
     fetch('http://localhost:3000/api/products')
       .then(respuesta => respuesta.json())
       .then(datos => {
-        setProductsCount(datos.meta.count);
+        setProductsCount(datos.count);
+        setCategoriesCount(datos.countByCategory || {});
         
-        // Magia de JavaScript: Agarramos el array de productos y sacamos el último
-        const arrayProductos = datos.data;
-        const elUltimo = arrayProductos[arrayProductos.length - 1]; 
+        const arrayProductos = datos.products || [];
+        setProductsList(arrayProductos);
         
-        setLastProduct(elUltimo); // Lo guardamos en su caja
-        setProductsList(arrayProductos); // Guardamos toda la lista por si queremos usarla después
+        // Buscamos los detalles completos del último producto creado para mostrar su precio y descripción
+        if (arrayProductos.length > 0) {
+          const elUltimo = arrayProductos[arrayProductos.length - 1]; 
+          fetch(elUltimo.detail)
+            .then(res => res.json())
+            .then(prodDetail => setLastProduct(prodDetail))
+            .catch(err => console.error("Error detalle del último producto:", err));
+        }
       })
       .catch(error => console.error("Error productos:", error));
 
   }, []);
 
-  // --- MAGIA PARA CONTAR CATEGORÍAS ÚNICAS ---
-  let totalCategories = "Cargando...";
-  
-  if (productsList.length > 0) {
-    // Extraemos solo las categorías de todos los productos
-    const todasLasCategorias = productsList.map(producto => producto.category);
-    
-    // 'Set' es un truco de JS que elimina automáticamente los duplicados
-    const categoriasUnicas = new Set(todasLasCategorias);
-    
-    // Contamos cuántas quedaron
-    totalCategories = categoriasUnicas.size; 
-  }
+  // --- CONTAR CATEGORÍAS ÚNICAS ---
+  const totalCategories = Object.keys(categoriesCount).length;
 
   // 3. La Vista
   return (
     <div className="App">
       <header className="App-header">
-        <h1>📊 Panel de Control (Dashboard)</h1>
+        <h1 style={{ margin: '30px 0 10px 0', fontSize: '2.5rem', color: '#61dafb' }}>📊 Panel de Control (Dashboard)</h1>
         
-        {/* --- TARJETAS DE MÉTRICAS (Ahora usando nuestro Componente) --- */}
-        <div style={{ display: 'flex', gap: '30px', marginTop: '30px' }}>
+        {/* --- TARJETAS DE MÉTRICAS --- */}
+        <div style={{ display: 'flex', gap: '30px', marginTop: '30px', flexWrap: 'wrap', justifyContent: 'center' }}>
           
           <MetricCard title="Usuarios Totales" value={usersCount} />
           <MetricCard title="Productos en Venta" value={productsCount} />
@@ -68,10 +63,13 @@ function App() {
 
         </div>
 
-        {/* --- ÚLTIMO PRODUCTO (Usando el Componente) --- */}
+        {/* --- ÚLTIMO PRODUCTO --- */}
         <LastProduct product={lastProduct} />
 
-        {/* --- LISTADO DE PRODUCTOS (Usando el Componente) --- */}
+        {/* --- CATEGORÍAS BREAKDOWN --- */}
+        <CategoryPanel categories={categoriesCount} />
+
+        {/* --- LISTADO DE PRODUCTOS --- */}
         <ProductList products={productsList} />
 
       </header>
